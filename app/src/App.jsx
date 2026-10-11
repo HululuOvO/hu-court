@@ -24,8 +24,8 @@ function HUWordmark() {
   return (
     <svg className="hu-wordmark" viewBox="0 0 120 54" aria-hidden="true" focusable="false">
       <g transform="skewX(-8)" fill="currentColor">
-        <path d="M12 4H26V20H43V4H57V50H43V33H26V50H12Z" />
-        <path d="M65 4H79V29C79 36 82 39 88 39C94 39 98 36 98 29V4H112V30C112 44 103 51 88 51C74 51 65 44 65 30Z" />
+        <path d="M12 4H22V21H44V4H54V50H44V31H22V50H12Z" />
+        <path d="M61 4H72V29C72 37 77 40 85.5 40C94 40 99 37 99 29V4H110V30C110 44 101 51 85.5 51C70 51 61 44 61 30Z" />
       </g>
     </svg>
   );
@@ -167,20 +167,23 @@ export function App() {
     const timer = setTimeout(() => {
       setIntro(null);
       go("court/" + intro.id);
-    }, 1900);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2400);
     return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
     if (profile) modalRef.current?.focus();
   }, [profile]);
   useEffect(() => {
-    if (route.length) mainRef.current?.focus({ preventScroll: true });
-  }, [route.join("/")]);
+    if (route.length && !intro) mainRef.current?.focus({ preventScroll: true });
+  }, [route.join("/"), intro]);
   const match = matches.find((m) => m.id === route[1]),
     home = route[0] !== "match" && route[0] !== "court";
   const enter = (m) => {
     const s = courtState(m, now);
-    if (s === "open") setIntro(m);
+    if (s === "open") {
+      setIntro(m);
+      go("court/" + m.id);
+    }
     else if (s === "closed") go("court/" + m.id + "/records");
   };
   const follow = (m) => {
@@ -320,19 +323,24 @@ export function App() {
               setIntro(null);
               go("court/" + intro.id);
             }
-            if (e.key === "Tab") e.preventDefault();
+            if (e.key === "Tab") {
+              e.preventDefault();
+              introRef.current?.querySelector("button")?.focus();
+            }
           }}
         >
           <div className="entrance-red" aria-hidden="true" />
           <div className="entrance-blue" aria-hidden="true" />
+          <div className="entrance-seam" aria-hidden="true" />
           <div className="entrance-screen">
-            <span className="brand">HU</span>
-            <span className="entrance-kicker">赛后小法庭</span>
-            <p>
-              {teams[intro.home].name} <span>vs</span> {teams[intro.away].name}
+            <span className="brand"><HUWordmark /></span>
+            <span className="entrance-side entrance-side-red">红方</span>
+            <span className="entrance-side entrance-side-blue">蓝方</span>
+            <span className="entrance-kicker">现在</span>
+            <h2 aria-label="现在开庭"><span>开</span><span>庭</span></h2>
+            <p className="entrance-matchup">
+              {teams[intro.home].name} <span>VS</span> {teams[intro.away].name}
             </p>
-            <h2><span>现在，</span><span>开庭。</span></h2>
-            <span className="entrance-caption">有分歧，就说个明白。</span>
             <button
               onClick={() => {
                 setIntro(null);
