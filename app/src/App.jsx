@@ -16,15 +16,16 @@ import {
   SoccerBall,
 } from "@phosphor-icons/react";
 import { matches, teams, courtState, makeComments, WINDOW } from "./data";
+import { courtCrests } from "./crest-assets";
 const sides = { red: "红方", blue: "蓝方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
-function Crest({ team, large = false }) {
+function Crest({ team, large = false, court = false }) {
   return (
     <span className={"crest-frame" + (large ? " large" : "")}>
       <img
         className={"crest " + (large ? "large" : "")}
-        src={"https://crests.football-data.org/" + team.id + ".svg"}
+        src={(court && courtCrests[team.id]) || "https://crests.football-data.org/" + team.id + ".svg"}
         alt={team.name + "队徽"}
       />
     </span>
@@ -547,7 +548,7 @@ function MatchHeader({ match, now, court = false }) {
       </div>
       <div className="big-scoreboard">
         <a href={"#/match/" + match.id} className="big-team">
-          <Crest team={teams[match.home]} large />
+          <Crest team={teams[match.home]} large court={court} />
           <h2>{teams[match.home].name}</h2>
         </a>
         <div className="big-score-center">
@@ -568,7 +569,7 @@ function MatchHeader({ match, now, court = false }) {
           )}
         </div>
         <a href={"#/match/" + match.id} className="big-team">
-          <Crest team={teams[match.away]} large />
+          <Crest team={teams[match.away]} large court={court} />
           <h2>{teams[match.away].name}</h2>
         </a>
       </div>
@@ -746,11 +747,11 @@ function Court({
     section === "jury" ? "jury" : section === "records" ? "records" : "debate";
   return (
     <>
+      <div className="court-banner">
       <a className="back-link" href="#/">
         <ArrowLeft size={18} />
         返回比赛
       </a>
-      <div className="court-banner">
       <MatchHeader match={match} now={now} court />
       <div className="court-title">
         <div>
