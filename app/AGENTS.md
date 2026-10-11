@@ -8,6 +8,7 @@
 - Comments and hot comments open only after choosing an entry. Smaller text and spacious comments.
 - Responsive phone layout. First release uses clearly labelled sample data, in-session interactions.
 - Latest references: 12.30.37 home and 12.32.36 debate screenshots. Stadium belongs only to the fading homepage hero; court is white with a strong red match banner. Full-screen red/blue entrance, large red/blue proportional support bar, clear side headings, neutral entry below. Keep debate first and comments behind entries. Jury uses simple single-choice rows and explicit submit, with animated count changes and vote switching.
+- Latest toolbar feedback: tint the top navigation with subtle color, strengthen HU identity and unify it with the red court banner. Keep the red match banner rather than introducing split team colors. League headings use text only. Preserve all interactive flows.
 
 Run the local server yourself and open the preview in the browser available to this environment. Do not give the user server-start instructions when you can run it.
 
