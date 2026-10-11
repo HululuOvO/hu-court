@@ -310,7 +310,7 @@ export const makeComments = (m) => [
   "id": m.id + "-9",
   "side": "neutral",
   "name": "只聊比赛",
-  "text": "红方在说表现，蓝方在说结果，其实这两件事不冲突。",
+  "text": "正方在说表现，反方在说结果，其实这两件事不冲突。",
   "likes": 35,
   "time": "11分钟前",
   "replies": [
