@@ -2,8 +2,16 @@
 // Replace this module with a licensed match-data provider for production.
 const start = Date.now();
 export const WINDOW = 12 * 3600000;
-const t = (name, id, players) => ({ name, id, players: players.split("、") });
+const t = (name, id, players, crest) => ({ name, id, crest, players: players.split("、") });
 export const teams = {
+  bayern: t("拜仁慕尼黑", "bayern", "诺伊尔、莱默尔、于帕梅卡诺、金玟哉、戴维斯、基米希、帕夫洛维奇、穆西亚拉、奥利塞、格纳布里、凯恩", "https://a.espncdn.com/i/teamlogos/soccer/500/132.png"),
+  dortmund: t("多特蒙德", "dortmund", "科贝尔、瑞尔森、安东、施洛特贝克、本塞拜尼、萨比策、恩梅查、布兰特、阿德耶米、吉滕斯、吉拉西", "https://a.espncdn.com/i/teamlogos/soccer/500/124.png"),
+  leipzig: t("莱比锡", "leipzig", "古拉西、亨里希斯、奥尔班、卢克巴、劳姆、海达拉、施拉格尔、西蒙斯、鲍姆加特纳、奥蓬达、塞斯科", "https://a.espncdn.com/i/teamlogos/soccer/500/11420.png"),
+  inter: t("国际米兰", "inter", "索默、帕瓦尔、阿切尔比、巴斯托尼、邓弗里斯、巴雷拉、恰尔汗奥卢、姆希塔良、迪马尔科、劳塔罗、图拉姆", "https://a.espncdn.com/i/teamlogos/soccer/500/110.png"),
+  milan: t("AC 米兰", "milan", "迈尼昂、卡拉布里亚、托莫里、加比亚、特奥、福法纳、赖因德斯、普利西奇、洛夫图斯·奇克、莱奥、莫拉塔", "https://a.espncdn.com/i/teamlogos/soccer/500/103.png"),
+  juventus: t("尤文图斯", "juventus", "迪格雷戈里奥、萨沃纳、加蒂、卡卢卢、坎比亚索、洛卡特利、图拉姆、孔塞桑、库普梅纳斯、伊尔迪兹、弗拉霍维奇", "https://a.espncdn.com/i/teamlogos/soccer/500/111.png"),
+  napoli: t("那不勒斯", "napoli", "梅雷特、迪洛伦佐、拉赫马尼、布翁乔尔诺、奥利维拉、洛博特卡、安古伊萨、麦克托米奈、波利塔诺、克瓦拉茨赫利亚、卢卡库", "https://a.espncdn.com/i/teamlogos/soccer/500/114.png"),
+  psg: t("巴黎圣日耳曼", "psg", "多纳鲁马、阿什拉夫、马尔基尼奥斯、帕乔、努诺·门德斯、维蒂尼亚、若昂·内维斯、法比安·鲁伊斯、登贝莱、巴尔科拉、贡萨洛·拉莫斯", "https://a.espncdn.com/i/teamlogos/soccer/500/160.png"),
   united: t(
     "曼联",
     66,
@@ -68,6 +76,7 @@ export const teams = {
 export const matches = [
   {
     id: "m1",
+    demoStatus: "open",
     league: "英超",
     home: "united",
     away: "spurs",
@@ -94,6 +103,7 @@ export const matches = [
   },
   {
     id: "m2",
+    demoStatus: "closed",
     league: "英超",
     home: "liverpool",
     away: "chelsea",
@@ -119,6 +129,7 @@ export const matches = [
   },
   {
     id: "m3",
+    demoStatus: "closed",
     league: "英超",
     home: "arsenal",
     away: "villa",
@@ -160,6 +171,7 @@ export const matches = [
   },
   {
     id: "m5",
+    demoStatus: "open",
     league: "西甲",
     home: "barcelona",
     away: "getafe",
@@ -195,13 +207,64 @@ export const matches = [
     stats: [],
     votes: [0, 0, 0],
   },
+  {
+    id: "m7", league: "欧冠", home: "bayern", away: "psg", score: [2, 2], state: "finished", demoStatus: "open",
+    topic: "两度领先又被追平，拜仁该不该被批评？",
+    red: "进攻有火力，防守不能掉线。", blue: "强强对话，平局不是失败。",
+    redBody: "两次领先都没守住，转换时的站位和防线保护需要复盘。", blueBody: "对手也有顶级进攻。创造了机会，过程并不是毫无亮点。",
+    goals: [[19,"home","凯恩"],[38,"away","登贝莱"],[61,"home","奥利塞"],[84,"away","巴尔科拉"]],
+    stats: [[53,47,"控球率",true],[16,14,"射门"],[6,5,"射正"],[6,5,"角球"]], votes: [185,142,49],
+  },
+  { id: "m8", league: "欧冠", home: "madrid", away: "inter", score: null, state: "scheduled", goals: [], stats: [], votes: [0,0,0] },
+  {
+    id: "m9", league: "德甲", home: "bayern", away: "dortmund", score: [2, 1], state: "finished", demoStatus: "open",
+    topic: "赢下国家德比，拜仁这场够有说服力吗？",
+    red: "关键时刻，实力决定胜负。", blue: "赢了比赛，也得正视隐患。",
+    redBody: "中场控制和关键球的把握更好，赢球有清晰的比赛内容。", blueBody: "领先后的防守有些被动，不能让胜利遮住最后阶段的问题。",
+    goals: [[24,"home","凯恩"],[57,"away","吉拉西"],[78,"home","穆西亚拉"]],
+    stats: [[58,42,"控球率",true],[18,11,"射门"],[7,4,"射正"],[7,3,"角球"]], votes: [156,83,31],
+  },
+  { id: "m10", league: "德甲", home: "leipzig", away: "dortmund", score: null, state: "scheduled", goals: [], stats: [], votes: [0,0,0] },
+  { id: "m11", league: "德甲", home: "bayern", away: "leipzig", score: [1,0], state: "live", goals: [[31,"home","凯恩"]], stats: [[59,41,"控球率",true],[12,8,"射门"],[4,3,"射正"],[5,3,"角球"]], votes: [0,0,0] },
+  {
+    id: "m12", league: "意甲", home: "inter", away: "milan", score: [1,1], state: "finished", demoStatus: "open",
+    topic: "德比握手言和，国米错过了赢球机会吗？",
+    red: "占据主动，效率还得更高。", blue: "德比很难，一分也有价值。",
+    redBody: "机会创造得足够多，门前的处理和最后一传可以做得更好。", blueBody: "对手防线并不容易突破。高强度的德比，稳定拿分也重要。",
+    goals: [[29,"home","劳塔罗"],[73,"away","普利西奇"]],
+    stats: [[55,45,"控球率",true],[17,10,"射门"],[5,4,"射正"],[6,4,"角球"]], votes: [139,112,44],
+  },
+  { id: "m13", league: "意甲", home: "juventus", away: "napoli", score: null, state: "scheduled", goals: [], stats: [], votes: [0,0,0] },
+  {
+    id: "m14", league: "意甲", home: "napoli", away: "milan", score: [2,0], state: "finished", demoStatus: "closed",
+    topic: "两球取胜，那不勒斯靠的是整体还是个人？",
+    red: "整体配合，是这场的答案。", blue: "关键个人表现，更值得称赞。",
+    redBody: "压迫、跑位和中场衔接一起发挥了作用，进球是整体工作的结果。", blueBody: "战术创造机会，但关键时刻的个人处理决定了最后的比分。",
+    goals: [[36,"home","卢卡库"],[69,"home","麦克托米奈"]],
+    stats: [[51,49,"控球率",true],[14,12,"射门"],[6,3,"射正"],[5,5,"角球"]], votes: [208,96,38],
+  },
+
 ];
 export const courtState = (m, now = Date.now()) =>
   m.state !== "finished"
     ? m.state
-    : now >= m.endedAt + WINDOW
+    : m.demoStatus
+      ? m.demoStatus
+      : now >= m.endedAt + WINDOW
       ? "closed"
       : "open";
+// Each demo visit loops its countdown; no example is retired by this clock.
+export const demoRemaining = (startedAt, now = Date.now()) =>
+  WINDOW - (Math.max(0, now - startedAt) % WINDOW);
+const fanNames = {
+  united: ["弗格森的口香糖", "梦剧场补时员", "布鲁诺传球频道"],
+  liverpool: ["安菲尔德夜班", "萨拉赫的左脚", "克洛普的眼镜"],
+  arsenal: ["温格的长款羽绒服", "酋长球场第九排", "萨卡的右边路"],
+  barcelona: ["克鲁伊夫的笔记", "诺坎普晚班", "佩德里传球频道"],
+  bayern: ["安联看台常驻", "穆勒的空间说明书", "凯恩的进球账本"],
+  inter: ["梅阿查看台常驻", "劳塔罗的射门靴", "巴雷拉跑不累"],
+  napoli: ["马拉多纳球场晚风", "那不勒斯蓝调", "中场喝杯意式"],
+};
 export const makeComments = (m) => [
   {
     id: m.id + "-1",
@@ -210,7 +273,7 @@ export const makeComments = (m) => [
     text:
       m.id === "m1"
         ? "领先之后退得太深了，问题不是没赢，是一直没把主动权拿回来。"
-        : "比分背后还有过程，前场的选择值得再看一遍。",
+        : m.redBody + "关键片段值得再看一遍。",
     likes: 1286,
     time: "18分钟前",
     replies: [
@@ -238,7 +301,7 @@ export const makeComments = (m) => [
     id: m.id + "-2",
     side: "blue",
     name: "周末看台",
-    text: "可以批评比赛，但别只拿结果下结论。把几次关键机会放在一起看，才更公平。",
+    text: m.blueBody + "把几次关键机会放在一起看，才更公平。",
     likes: 864,
     time: "24分钟前",
     replies: [
@@ -411,7 +474,18 @@ export const makeComments = (m) => [
   "replies": []
 },
 
-].map((comment) => ({
+].map((comment, index) => ({
   ...comment,
+  name: [
+    (fanNames[m.home] || ["主场看台有话说"])[0],
+    (fanNames[m.home] || ["", "补时再聊"])[1],
+    "中场端水大师",
+    (fanNames[m.home] || ["", "", "战术板上的橡皮"])[2],
+    (fanNames[m.away] || ["客场看台有话说"])[0],
+    "VAR今天上班吗", "九十分钟不散场", "越位线上散步", "听完两边再投票",
+    "边后卫又压上了", "补时还有一分钟", "只看回放不吵架", "第十二人不下班",
+    "草皮上的小算盘", "传控还是反击", "禁区外有点想法", "门柱今天也努力了", "散场以后再聊",
+  ][index],
+  text: m.score && m.score[0] !== m.score[1] ? comment.text.replace("接受平局", "接受结果") : comment.text,
   createdAt: start - Number.parseInt(comment.time) * (comment.time.includes("小时") ? 3600000 : 60000),
 }));
