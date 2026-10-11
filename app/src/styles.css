@@ -2569,8 +2569,8 @@ footer span:last-child {
 .featured-argument .comment-header { gap: 0; }
 .featured-argument .comment-header > svg, .featured-argument .comment-header > .side-tag, .featured-argument .comment-header > div > span { display: none; }
 .featured-argument .comment-header strong { color: #959ca7; font-size: 11px; font-weight: 400; }
-.featured-argument .comment-text { font-size: 13px; line-height: 1.85; margin: 9px 0 13px; color: #424954; }
-.featured-argument .comment-actions { justify-content: flex-end; gap: 17px; }
+.featured-argument .comment-text { padding-left: 0; font-size: 13px; line-height: 1.85; margin: 9px 0 13px; color: #424954; }
+.featured-argument .comment-actions { padding-left: 0; justify-content: flex-end; gap: 17px; }
 .featured-argument .comment-actions button { font-size: 11px; }
 .featured-argument .comment-actions > button:last-child { color: var(--blue); }
 .featured-argument.red .comment-actions > button:last-child { color: var(--red); }
@@ -2630,3 +2630,9 @@ footer span:last-child {
   .entrance-screen { opacity: 1; transform: none; }
   .duel-half { transition: none; }
 }
+/* Keep the VS marker exactly on the proportional color boundary. */
+.duel-half { flex-basis: auto; flex-shrink: 0; box-sizing: border-box; transition: width .72s cubic-bezier(.2,.8,.2,1); }
+.duel-vs { transition: left .72s cubic-bezier(.2,.8,.2,1); }
+@media (prefers-reduced-motion: reduce) { .duel-half, .duel-vs { transition: none; } }
+
+.featured-argument .expand-replies { margin-left: 0; }
