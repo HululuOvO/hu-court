@@ -23,3 +23,7 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 - Crest feedback: no white backing and no global tint. Manchester United's three external white gaps are transparent; every shield/color path remains unchanged. Tottenham uses a clear white silhouette on the red section, with its source shape and negative spaces retained. Match lists use the original club assets.
 
 - Latest HU/home feedback: HU must be visually larger and heavier. Use a crisp vector HU letterform with thick strokes and a slight forward lean, without a backing tile. Home and court share the same straight white navigation with red wordmark and underline; keep the stadium home hero and current match/court flows.
+
+- Latest logo/entrance feedback: shrink HU to 92px desktop/72px phone and reduce stroke weight while keeping crisp vector letters. Entry is a 2.4-second full-screen red/blue collision: halves meet with a brief seam flash, a clean 开庭 title holds, then halves open outward. Reduced motion uses a static 0.5-second opening. Preserve pure colors and no gradient blending.
+
+- Render the court underneath the entrance at click time. The red/blue panels open directly onto that court, with the backdrop cleared before exit. Keep focus inside the opening until it finishes or is skipped.
