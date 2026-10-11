@@ -2126,10 +2126,10 @@ footer span:last-child {
   .entrance-screen, .entrance-screen h2 > span { animation: none; }
 }
 
-/* Frame authentic vectors so translucent source backgrounds do not show as boxes. */
-.crest-frame { width: 56px; height: 56px; flex: 0 0 56px; display: inline-grid; place-items: center; background: #fff; border-radius: 50%; border: 1px solid #edf0f4; overflow: hidden; }
-.crest-frame .crest { width: 42px; height: 42px; margin: 0; object-fit: contain; }
-.crest-frame.large { width: 100px; height: 100px; flex-basis: 100px; border: 0; box-shadow: 0 8px 25px #0000000d; }
+/* Authentic crest colors on a transparent frame. */
+.crest-frame { width: 56px; height: 56px; flex: 0 0 56px; display: inline-grid; place-items: center; background: transparent; border: 0; }
+.crest-frame .crest { width: 42px; height: 42px; margin: 0; object-fit: contain; mix-blend-mode: normal; }
+.crest-frame.large { width: 100px; height: 100px; flex-basis: 100px; }
 .crest-frame.large .crest.large { width: 76px; height: 76px; }
 .court-score-header .crest-frame.large { width: 76px; height: 76px; flex-basis: 76px; }
 .court-score-header .crest-frame.large .crest.large { width: 58px; height: 58px; }
@@ -2140,4 +2140,48 @@ footer span:last-child {
   .crest-frame .crest { width: 34px; height: 34px; }
   .crest-frame.large, .court-score-header .crest-frame.large { width: 68px; height: 68px; flex-basis: 68px; }
   .crest-frame.large .crest.large, .court-score-header .crest-frame.large .crest.large { width: 50px; height: 50px; }
+}
+
+
+/* Straight white navigation above a distinct, solid-red match section. */
+.site-atmosphere:has(~ .court-shell) { display: none; }
+.court-shell:has(.court-banner) { position: relative; isolation: isolate; padding-top: 0; }
+.court-shell:has(.court-banner) .topbar {
+  height: 88px; background: white; border: 0; border-bottom: 1px solid #e9ebef;
+  border-radius: 0; box-shadow: none; backdrop-filter: none; color: #20232a;
+  padding: 0; margin-bottom: 0;
+}
+.court-shell:has(.court-banner) .topbar .brand {
+  color: #bd1728; background: none; box-shadow: none; border-radius: 0; justify-content: flex-start;
+}
+.court-shell:has(.court-banner) .topbar .main-nav {
+  height: 100%; background: none; border: 0; border-radius: 0; padding: 0; gap: 36px; align-items: stretch;
+}
+.court-shell:has(.court-banner) .topbar .main-nav a {
+  display: flex; align-items: center; justify-content: center; padding: 0; min-width: 74px; border-radius: 0; font-size: 15px;
+}
+.court-shell:has(.court-banner) .topbar .main-nav .selected {
+  background: none; color: #bd1728; box-shadow: none; position: relative;
+}
+.court-shell:has(.court-banner) .topbar .main-nav .selected::after {
+  content: ''; height: 3px; background: #bd1728; position: absolute; bottom: 0; left: 16px; right: 16px;
+}
+.court-shell:has(.court-banner) .topbar .profile-button { background: none; border: 0; color: #535966; }
+.court-banner { background: transparent; border-radius: 0; overflow: visible; margin: 0; padding: 19px 0 30px; }
+.court-banner::before {
+  top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw;
+  right: auto; background: #b91425; z-index: -1;
+}
+.court-banner > .back-link { color: #ffffffc9; margin: 0 0 18px; }
+.court-banner > .back-link:hover { color: white; }
+.court-banner .match-header { padding: 0 0 18px; }
+.court-banner .court-title { margin: 22px 0 0; }
+.court-banner .court-title h1 { max-width: 980px; }
+@media (max-width: 700px) {
+  .court-shell:has(.court-banner) .topbar { height: 72px; margin-bottom: 0; }
+  .court-shell:has(.court-banner) .topbar .main-nav { gap: 22px; }
+  .court-shell:has(.court-banner) .topbar .main-nav a { min-width: 48px; font-size: 13px; }
+  .court-shell:has(.court-banner) .topbar .main-nav .selected::after { left: 8px; right: 8px; }
+  .court-banner { margin: 0; padding: 17px 0 25px; }
+  .court-banner .court-title { margin-top: 18px; }
 }
