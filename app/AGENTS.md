@@ -21,3 +21,5 @@ Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts
 
 - Final clarification: the uppermost HU navigation is a clean white, straight-edged full-width bar, no gradient, glass tile or rounded nav pills. HU is a red wordmark, navigation uses a red underline. Below it, score and court title stay in a solid red, full-width, straight-edged section. Debate stays white with red/blue support strip.
 - Crest feedback: no white backing and no global tint. Manchester United's three external white gaps are transparent; every shield/color path remains unchanged. Tottenham uses a clear white silhouette on the red section, with its source shape and negative spaces retained. Match lists use the original club assets.
+
+- Latest HU/home feedback: HU must be visually larger and heavier. Use a crisp vector HU letterform with thick strokes and a slight forward lean, without a backing tile. Home and court share the same straight white navigation with red wordmark and underline; keep the stadium home hero and current match/court flows.
