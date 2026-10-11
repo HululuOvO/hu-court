@@ -2146,27 +2146,27 @@ footer span:last-child {
 /* Straight white navigation above a distinct, solid-red match section. */
 .site-atmosphere:has(~ .court-shell) { display: none; }
 .court-shell:has(.court-banner) { position: relative; isolation: isolate; padding-top: 0; }
-.court-shell:has(.court-banner) .topbar {
-  height: 88px; background: white; border: 0; border-bottom: 1px solid #e9ebef;
+.topbar {
+  height: 94px; background: white; border: 0; border-bottom: 1px solid #e9ebef;
   border-radius: 0; box-shadow: none; backdrop-filter: none; color: #20232a;
-  padding: 0; margin-bottom: 0;
+  padding: 0; margin-bottom: 34px;
 }
-.court-shell:has(.court-banner) .topbar .brand {
+.topbar .brand {
   color: #bd1728; background: none; box-shadow: none; border-radius: 0; justify-content: flex-start;
 }
-.court-shell:has(.court-banner) .topbar .main-nav {
+.topbar .main-nav {
   height: 100%; background: none; border: 0; border-radius: 0; padding: 0; gap: 36px; align-items: stretch;
 }
-.court-shell:has(.court-banner) .topbar .main-nav a {
+.topbar .main-nav a {
   display: flex; align-items: center; justify-content: center; padding: 0; min-width: 74px; border-radius: 0; font-size: 15px;
 }
-.court-shell:has(.court-banner) .topbar .main-nav .selected {
+.topbar .main-nav .selected {
   background: none; color: #bd1728; box-shadow: none; position: relative;
 }
-.court-shell:has(.court-banner) .topbar .main-nav .selected::after {
+.topbar .main-nav .selected::after {
   content: ''; height: 3px; background: #bd1728; position: absolute; bottom: 0; left: 16px; right: 16px;
 }
-.court-shell:has(.court-banner) .topbar .profile-button { background: none; border: 0; color: #535966; }
+.topbar .profile-button { background: none; border: 0; color: #535966; }
 .court-banner { background: transparent; border-radius: 0; overflow: visible; margin: 0; padding: 19px 0 30px; }
 .court-banner::before {
   top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw;
@@ -2178,10 +2178,23 @@ footer span:last-child {
 .court-banner .court-title { margin: 22px 0 0; }
 .court-banner .court-title h1 { max-width: 980px; }
 @media (max-width: 700px) {
-  .court-shell:has(.court-banner) .topbar { height: 72px; margin-bottom: 0; }
-  .court-shell:has(.court-banner) .topbar .main-nav { gap: 22px; }
-  .court-shell:has(.court-banner) .topbar .main-nav a { min-width: 48px; font-size: 13px; }
-  .court-shell:has(.court-banner) .topbar .main-nav .selected::after { left: 8px; right: 8px; }
+  .topbar { height: 80px; margin-bottom: 27px; }
+  .topbar .main-nav { gap: 22px; }
+  .topbar .main-nav a { min-width: 48px; font-size: 13px; }
+  .topbar .main-nav .selected::after { left: 8px; right: 8px; }
   .court-banner { margin: 0; padding: 17px 0 25px; }
   .court-banner .court-title { margin-top: 18px; }
+}
+
+.site-shell { padding-top: 0; position: relative; isolation: isolate; }
+.topbar::before { content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw; background: white; z-index: -1; }
+.topbar .brand { width: 112px; height: 54px; padding: 0; transform: none; }
+.hu-wordmark { display: block; width: 112px; height: 54px; flex: none; }
+.court-shell .topbar { margin-bottom: 0; }
+.home-hero { padding-left: 0; padding-right: 0; }
+.home-hero .eyebrow { color: #687080; }
+@media (max-width: 700px) {
+  .topbar .brand { width: 86px; height: 44px; }
+  .hu-wordmark { width: 86px; height: 44px; }
+  .court-shell .topbar { margin-bottom: 0; }
 }
