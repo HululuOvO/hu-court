@@ -2626,7 +2626,7 @@ footer span:last-child {
   .entrance-scales { width: 48px; height: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .entrance-curtain, .entrance-screen, .entrance-scales, .badge.open::before, .highlight-quote { animation: none; }
+  .entrance-curtain, .entrance-screen, .entrance-screen > .entrance-scales, .badge.open::before, .highlight-quote { animation: none; }
   .entrance-screen { opacity: 1; transform: none; }
   .duel-half { transition: none; }
 }
