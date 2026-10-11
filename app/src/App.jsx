@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,6 +9,7 @@ import {
   ChatCircle,
   UserCircle,
   Scales,
+  Fire,
   Clock,
   ArrowUpRight,
   X,
@@ -22,10 +23,10 @@ const sides = { red: "正方", blue: "反方", neutral: "不站队", hot: "热�
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
 function HUWordmark() {
-  return <svg className="hu-wordmark" viewBox="0 0 88 48" aria-hidden="true" focusable="false">
+  return <svg className="hu-wordmark" viewBox="0 0 88 64" aria-hidden="true" focusable="false">
     <g fill="currentColor">
-      <path d="M4 5h6v16h25V5h6v38h-6V27H10v16H4Z" />
-      <path d="M49 5h6v23c0 8 4 11 11 11s11-3 11-11V5h6v23c0 12-6 17-17 17S49 40 49 28Z" />
+      <path d="M4 5h6v23h25V5h6v52h-6V34H10v23H4Z" />
+      <path d="M49 5h6v35c0 9 4 13 11 13s11-4 11-13V5h6v35c0 13-6 19-17 19S49 53 49 40Z" />
     </g>
   </svg>;
 }
@@ -90,7 +91,7 @@ function AnimatedNumber({ value, animateOnMount = false }) {
     let frame;
     const started = performance.now();
     const tick = (time) => {
-      const progress = Math.min(1, (time - started) / 450);
+      const progress = Math.min(1, (time - started) / 720);
       setDisplay(Math.round(from + (value - from) * (1 - (1 - progress) ** 3)));
       if (progress < 1) frame = requestAnimationFrame(tick);
     };
@@ -106,16 +107,12 @@ function SupportBar({ match, vote, revealed = true }) {
   return (
     <div className="support-summary">
       <div className="support-heading"><span>正反方对抗</span><small>双方支持率 · 不站队单独计入</small></div>
-      <div className="support-labels">
-        <div className="support-label affirmative"><span>正方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} />%</strong></div>
-        <span className="support-divider">VS</span>
-        <div className="support-label opposing"><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} />%</strong><span>反方</span></div>
+      <div className="duel-meter" role="img" aria-label={`正方 ${percent}%，反方 ${100 - percent}%`}>
+        <div className="duel-half affirmative" style={{ flexGrow: percent }}><span>正方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} /><small>%</small></strong></div>
+        <span className="duel-vs" style={{ left: percent + "%" }}>VS</span>
+        <div className="duel-half opposing" style={{ flexGrow: 100 - percent }}><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} /><small>%</small></strong><span>反方</span></div>
       </div>
-      <div className="support-track" role="img" aria-label={`正方 ${percent}%，反方 ${100 - percent}%`}>
-        <span className="support-track-red" style={{ flexGrow: percent }} />
-        <span className="support-track-blue" style={{ flexGrow: 100 - percent }} />
-      </div>
-      <div className="support-counts"><span><AnimatedNumber value={red} /> 人支持正方</span><span><AnimatedNumber value={blue} /> 人支持反方</span></div>
+      <div className="support-counts"><span><AnimatedNumber animateOnMount value={revealed ? red : 0} /> 人支持正方</span><span><AnimatedNumber animateOnMount value={revealed ? blue : 0} /> 人支持反方</span></div>
     </div>
   );
 }
@@ -174,7 +171,7 @@ export function App() {
     const timer = setTimeout(() => {
       setIntro(null);
       go("court/" + intro.id);
-    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2200);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2600);
     return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
@@ -344,10 +341,10 @@ export function App() {
             }
           }}
         >
-          <div className="entrance-backdrop" aria-hidden="true" />
+          <div className="entrance-curtain upper" aria-hidden="true" /><div className="entrance-curtain lower" aria-hidden="true" />
           <div className="entrance-screen">
-            <span className="brand"><HUWordmark /></span>
-            <h2>赛后法庭</h2>
+            <Scales className="entrance-scales" size={58} weight="light" aria-hidden="true" />
+            <h2>赛后小法庭</h2>
             <p className="entrance-subtitle">全体起立</p>
             <p className="entrance-matchup">
               {teams[intro.home].name} <span>VS</span> {teams[intro.away].name}
@@ -775,6 +772,25 @@ function MatchDetail({ match, now, tab, enter, follow, followed }) {
     </>
   );
 }
+function CourtHighlights({ match, comments, liked }) {
+  const [index, setIndex] = useState(0), [paused, setPaused] = useState(false);
+  const leaders = [...comments].sort((a, b) => (b.likes + (liked[b.id] ? 1 : 0)) - (a.likes + (liked[a.id] ? 1 : 0))).slice(0, 5);
+  useEffect(() => {
+    setIndex(0);
+  }, [match.id]);
+  useEffect(() => {
+    if (paused || leaders.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setInterval(() => setIndex((n) => n + 1), 4500);
+    return () => clearInterval(timer);
+  }, [match.id, paused, leaders.length]);
+  const current = leaders[index % leaders.length];
+  if (!current) return null;
+  return <a className="court-highlight" href={"#/court/" + match.id + "/hot"} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onFocus={() => setPaused(true)} onBlur={() => setPaused(false)} aria-label={"查看热评：" + current.name + "，" + current.text}>
+    <span className="highlight-label"><Fire size={16} weight="fill" />{index % leaders.length === 0 ? "最热" : "热议"}</span>
+    <span key={current.id} className="highlight-quote"><b>{current.name}</b>：{current.text}</span>
+    <span className="highlight-likes"><Heart size={13} />{(current.likes + (liked[current.id] ? 1 : 0)).toLocaleString("zh-CN")}</span>
+  </a>;
+}
 function Court({
   opening = false,
   enter,
@@ -811,16 +827,15 @@ function Court({
         <ArrowLeft size={18} />
         返回比赛
       </a>
-      <MatchHeader match={match} now={now} court />
+      <Scales className="court-watermark" weight="light" aria-hidden="true" />
       <div className="court-title">
-        <div>
-          <p className="eyebrow">HU 小法庭</p>
-          <h1>{match.topic}</h1>
-        </div>
-        <span className="court-clock">
-          <Clock size={17} />
-          {closed ? "庭审已结束" : <Remaining match={match} now={now} />}
-        </span>
+        <p className="eyebrow">赛后小法庭</p>
+        <h1>{match.topic}</h1>
+      </div>
+      <MatchHeader match={match} now={now} court />
+      <div className="court-live-strip">
+        <span className="court-clock"><Clock size={15} />{closed ? "庭审已结束" : <Remaining match={match} now={now} />}</span>
+        <CourtHighlights key={match.id} match={match} comments={comments} liked={liked} />
       </div>
       </div>
       <nav className="section-tabs" aria-label="法庭导航">
@@ -861,7 +876,9 @@ function Court({
         <section className="debate-entry">
           <SupportBar match={match} vote={vote} revealed={!opening} />
           <div className="opinion-grid">
-            {["red", "blue"].map((side) => (
+            {["red", "blue"].map((side) => {
+              const popular = [...comments].filter((c) => c.side === side).sort((a,b) => (b.likes + (liked[b.id] ? 1 : 0)) - (a.likes + (liked[a.id] ? 1 : 0)))[0];
+              return <div className={"argument-column " + side} key={side}>
               <a
                 className={"opinion-card " + side}
                 href={"#/court/" + match.id + "/" + side}
@@ -876,10 +893,12 @@ function Court({
                 </h2>
                 <p>{match[side + "Body"]}</p>
                 <div className="opinion-footer">
-                  进入讨论 · 发表意见 <ArrowRight size={20} />
+                  进入讨论 <ArrowRight size={17} />
                 </div>
               </a>
-            ))}
+              {popular && <Comment featured comment={popular} matchId={match.id} liked={liked} like={like} addReply={addReply} closed={closed} />}
+              </div>;
+            })}
           </div>
           <a
             className="neutral-entry panel"
@@ -1159,12 +1178,13 @@ function Thread({
     </section>
   );
 }
-function Comment({ comment: c, matchId, liked, like, addReply, closed }) {
+function Comment({ featured = false, comment: c, matchId, liked, like, addReply, closed }) {
+  const replyId = useId();
   const [expanded, setExpanded] = useState(false),
     [replying, setReplying] = useState(false),
     [reply, setReply] = useState("");
   return (
-    <article className="comment">
+    <article className={"comment" + (featured ? " featured-argument " + c.side : "")}>
       <div className="comment-header">
         <UserCircle size={31} weight="light" />
         <div>
@@ -1188,7 +1208,7 @@ function Comment({ comment: c, matchId, liked, like, addReply, closed }) {
         </button>
         <button disabled={closed} onClick={() => setReplying((v) => !v)}>
           <ChatCircle size={18} />
-          回复 {c.replies.length || ""}
+          {featured ? "反驳" : "回复"} {c.replies.length || ""}
         </button>
       </div>
       {c.replies.length > 0 && (
@@ -1237,11 +1257,11 @@ function Comment({ comment: c, matchId, liked, like, addReply, closed }) {
             }
           }}
         >
-          <label className="sr-only" htmlFor={"reply-" + c.id}>
+          <label className="sr-only" htmlFor={replyId}>
             回复{c.name}
           </label>
           <input
-            id={"reply-" + c.id}
+            id={replyId}
             maxLength={200}
             value={reply}
             onChange={(e) => setReply(e.target.value)}
