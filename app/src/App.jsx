@@ -16,7 +16,7 @@ import {
   CheckCircle,
   SoccerBall,
 } from "@phosphor-icons/react";
-import { matches, teams, courtState, makeComments, WINDOW } from "./data";
+import { matches, teams, courtState, makeComments, demoRemaining } from "./data";
 import { courtCrests } from "./crest-assets";
 import { leagues, standingsSnapshot } from "./standings-data";
 const sides = { red: "正方", blue: "反方", neutral: "不站队", hot: "热评" };
@@ -25,9 +25,20 @@ const go = (path = "") => (location.hash = "/" + path);
 function HUWordmark() {
   return <svg className="hu-wordmark" viewBox="0 0 88 64" aria-hidden="true" focusable="false">
     <g fill="currentColor">
-      <path d="M4 5h6v23h25V5h6v52h-6V34H10v23H4Z" />
-      <path d="M49 5h6v35c0 9 4 13 11 13s11-4 11-13V5h6v35c0 13-6 19-17 19S49 53 49 40Z" />
+      <path d="M6 8h9v18h12c8 0 12 4 12 12v17h-9V39c0-3-1-5-5-5H15v21H6Z" />
+      <path d="M47 26h9v16c0 4 2 5 6 5h10V26h9v29H61c-9 0-14-4-14-13Z" />
     </g>
+  </svg>;
+}
+function OpeningScales() {
+  return <svg className="entrance-scales" width="76" height="76" viewBox="0 0 96 96" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M48 17v61M35 79h26" />
+    <g className="scale-beam">
+      <path d="M17 31h62" />
+      <g className="scale-pan left"><path d="M17 31 6 55h22L17 31M6 55c0 8 22 8 22 0" /></g>
+      <g className="scale-pan right"><path d="m79 31-11 24h22L79 31M68 55c0 8 22 8 22 0" /></g>
+    </g>
+    <circle cx="48" cy="31" r="3" fill="currentColor" stroke="none" />
   </svg>;
 }
 function LeagueLogo({ league }) {
@@ -38,7 +49,7 @@ function Crest({ team, large = false, court = false }) {
     <span className={"crest-frame" + (large ? " large" : "")}>
       <img
         className={"crest " + (large ? "large" : "")}
-        src={(court && courtCrests[team.id]) || "https://crests.football-data.org/" + team.id + ".svg"}
+        src={(court && courtCrests[team.id]) || team.crest || "https://crests.football-data.org/" + team.id + ".svg"}
         alt={team.name + "队徽"}
       />
     </span>
@@ -58,13 +69,10 @@ function Badge({ match, now }) {
     </span>
   );
 }
-function Remaining({ match, now }) {
-  const t = Math.max(0, match.endedAt + WINDOW - now);
-  return (
-    <span>
-      {Math.floor(t / 3600000)}小时{Math.floor((t % 3600000) / 60000)}分后结案
-    </span>
-  );
+function Remaining({ startedAt, now }) {
+  const seconds = Math.ceil(demoRemaining(startedAt, now) / 1000);
+  const clock = [Math.floor(seconds / 3600), Math.floor(seconds % 3600 / 60), seconds % 60].map(n => String(n).padStart(2, "0")).join(":");
+  return <span>演示倒计时 <b>{clock}</b></span>;
 }
 function OpinionTitle({ text }) {
   const i = text.indexOf("，");
@@ -182,9 +190,15 @@ export function App() {
   }, [route.join("/"), intro]);
   const match = matches.find((m) => m.id === route[1]),
     home = !route[0] || route[0] === "following";
+  const courtVisit = route[0] === "court" ? route[1] : null;
+  const [visit, setVisit] = useState(() => ({ id: courtVisit, startedAt: Date.now() }));
+  useEffect(() => {
+    setVisit({ id: courtVisit, startedAt: Date.now() });
+  }, [courtVisit]);
   const enter = (m) => {
     const s = courtState(m, now);
     if (s === "open") {
+      setVisit({ id: m.id, startedAt: Date.now() });
       setIntro(m);
       go("court/" + m.id);
     }
@@ -301,6 +315,8 @@ export function App() {
             />
           ) : (
             <Court
+              key={match.id}
+              startedAt={visit.startedAt}
               opening={!!intro}
               enter={enter}
               match={match}
@@ -343,7 +359,7 @@ export function App() {
         >
           <div className="entrance-curtain upper" aria-hidden="true" /><div className="entrance-curtain lower" aria-hidden="true" />
           <div className="entrance-screen">
-            <Scales className="entrance-scales" size={58} weight="light" aria-hidden="true" />
+            <OpeningScales />
             <h2>赛后小法庭</h2>
             <p className="entrance-subtitle">全体起立</p>
             <p className="entrance-matchup">
@@ -485,11 +501,12 @@ function Home({ followed, following, now, enter, follow }) {
         </a>)}
       </nav>}
       {visible.length ? (
-        ["英超", "西甲"].map((league) => {
+        ["欧冠", "英超", "西甲", "德甲", "意甲"].map((league) => {
           const group = visible.filter((m) => m.league === league);
           return group.length ? (
             <section
               className="league-panel panel"
+              data-league={league}
               key={league}
               aria-label={league + "比赛"}
             >
@@ -792,6 +809,7 @@ function CourtHighlights({ match, comments, liked }) {
   </a>;
 }
 function Court({
+  startedAt,
   opening = false,
   enter,
   match,
@@ -834,7 +852,7 @@ function Court({
       </div>
       <MatchHeader match={match} now={now} court />
       <div className="court-live-strip">
-        <span className="court-clock"><Clock size={15} />{closed ? "庭审已结束" : <Remaining match={match} now={now} />}</span>
+        <span className="court-clock"><Clock size={15} />{closed ? "庭审已结束" : <Remaining startedAt={startedAt} now={now} />}</span>
         <CourtHighlights key={match.id} match={match} comments={comments} liked={liked} />
       </div>
       </div>
@@ -857,7 +875,7 @@ function Court({
       {tab === "jury" ? (
         <Jury match={match} vote={vote} cast={cast} closed={closed} />
       ) : tab === "records" ? (
-        <Records match={match} vote={vote} closed={closed} now={now} />
+        <Records key={match.id} match={match} vote={vote} closed={closed} now={now} startedAt={startedAt} />
       ) : tab === "others" ? (
         <OtherCourts match={match} now={now} enter={enter} />
       ) : thread ? (
@@ -964,7 +982,7 @@ function Jury({ match, vote, cast, closed }) {
             {(vote !== undefined || closed) && (
               <span className="vote-result">
                 <b>
-                  <AnimatedNumber value={Math.round(
+                  <AnimatedNumber animateOnMount={closed} value={Math.round(
                     ((match.votes[i] + (vote === i ? 1 : 0)) / total) * 100,
                   )} />
                   %
@@ -983,19 +1001,19 @@ function Jury({ match, vote, cast, closed }) {
     </section>
   );
 }
-function Records({ match, vote, closed, now }) {
+function Records({ match, vote, closed, now, startedAt }) {
   const total =
       match.votes.reduce((a, b) => a + b, 0) + (vote !== undefined ? 1 : 0),
     tallies = match.votes.map((n, i) => n + (vote === i ? 1 : 0)),
     winner = tallies.indexOf(Math.max(...tallies));
   return (
-    <section className="panel records-panel">
+    <section className={"panel records-panel" + (closed ? " closed-case" : "")}>
       <p className="eyebrow">庭审记录</p>
       <h2>{closed ? "终场之后，观点有了回响。" : "讨论还在继续。"}</h2>
       {closed ? (
         <>
           <div className={"verdict " + ["red", "blue", "neutral"][winner]}>
-            <span>社区投票结果</span>
+            <span className="verdict-label"><CheckCircle className="verdict-check" size={22} /> 社区投票结果</span>
             <h3>
               {winner === 0
                 ? match.red
@@ -1003,7 +1021,7 @@ function Records({ match, vote, closed, now }) {
                   ? match.blue
                   : "暂不站队，继续观察。"}
             </h3>
-            <p>获得最多支持 · {Math.round((tallies[winner] / total) * 100)}%</p>
+            <p>获得最多支持 · <AnimatedNumber animateOnMount value={Math.round((tallies[winner] / total) * 100)} />%</p>
           </div>
           <Jury match={match} vote={vote} cast={() => {}} closed />
           <p className="demo-note">
@@ -1012,10 +1030,10 @@ function Records({ match, vote, closed, now }) {
         </>
       ) : (
         <>
-          <p>完赛后开放12小时，结束后展示投票结果。</p>
+          <p>这是可反复参与的演示案例。每次进入重新倒计时，发言与投票持续开放。</p>
           <p className="court-clock">
             <Clock size={18} />
-            <Remaining match={match} now={now} />
+            <Remaining startedAt={startedAt} now={now} />
           </p>
           <a
             className="button primary"
@@ -1034,8 +1052,8 @@ function Records({ match, vote, closed, now }) {
           </strong>
         </div>
         <div>
-          <span>庭审时长</span>
-          <strong>12小时</strong>
+          <span>{closed ? "示例庭审时长" : "演示倒计时"}</span>
+          <strong>{closed ? "12小时" : "每次进入重置"}</strong>
         </div>
         <div>
           <span>陪审票数</span>
