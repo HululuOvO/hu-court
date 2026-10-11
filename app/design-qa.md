@@ -1,5 +1,15 @@
 # HU design QA
 
+## 2026-10-12 · Persistent demos and readable court
+
+- Clarified Hulu reference: custom compact red hu vector letters; website brand/accessible name stays HU.
+- Five competition sections with individual pale header colors and subtle pitch rings. 14 fixtures, including two UCL, three Bundesliga and three Serie A examples. Original league badges retained.
+- Explicit demo statuses keep open cases available indefinitely. Countdown resets per court visit, remains consistent across court tabs and loops at the 12-hour boundary. Closed samples remain fixed results.
+- Stronger court typography: desktop/phone tabs 16/14px at 600, featured users 14/13px at 600, comments 15/14px. Distinct football fan nicknames.
+- Scale beam swings ±12 degrees every .9s, pans counter-rotate while central stem stays fixed. Same-red curtains retained. Result verdict, vote summary and record detail reveal in sequence; all new motion disabled under reduced motion.
+- Browser checks: desktop score/crest center difference under .01px; all club assets loaded. 390px phone has no horizontal body overflow. Demo reentry shows 12:00:00; court-tab change preserves elapsed time. Jury vote 128→129; rebuttal 3→4 with reply visible in shared state.
+- Production build and 4 countdown/data tests pass; 4 hosting worker tests passed. Hosting source files unchanged.
+
 ## 2026-10-11 17:35 · Reference-driven refinement
 
 - Source: user-provided Screenshot 2026-10-11 at 17.31.44.png. Matched bright red #cf0000 / blue #245eaf, diagonal banner texture and a large scale watermark. Branding remains HU, not the source’s JRs mark.
