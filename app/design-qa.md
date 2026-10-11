@@ -4,9 +4,11 @@ final result: passed
 
 ## Current visual truth
 
+Latest crest references: `../work/references/IMG_7037.PNG`, `IMG_7038.PNG`, `IMG_7039.PNG`. Adopt the clean transparent crest, preserve internal shield colors, and keep a solid-colored header with a straight boundary to the white content.
+
 The user's latest screenshots and feedback supersede the earlier flat court mock. Home reference: `../work/references/Screenshot 2026-10-11 at 12.30.37.png`. Debate reference: `../work/references/Screenshot 2026-10-11 at 12.32.36.png`. Jury reference: `../work/references/Screenshot 2026-10-11 at 12.32.48.png`.
 
-Requested deviations are implemented: HU only; red controls; stadium only in the fading home hero; text-only league headings; a tinted glass HU navigation bar; retain the red match banner rather than split team colors; full-screen red/blue entrance; proportionate red/blue support strip and two large main opinions; neutral discussion below. Tabs start with debate. Comments open after choosing a voice; jury uses single-choice rows with explicit confirmation.
+Requested deviations are implemented: HU only; red controls; stadium only in the fading home hero; text-only league headings; a continuous white straight-edged HU navigation above a distinct full-width solid-red score and title section, with no rounded banner; full-screen red/blue entrance; proportionate red/blue support strip and two large main opinions; neutral discussion below. Tabs start with debate. Comments open after choosing a voice; jury uses single-choice rows with explicit confirmation.
 
 ## Screenshot comparison
 
@@ -20,19 +22,19 @@ Requested deviations are implemented: HU only; red controls; stadium only in the
 1. P1: stadium covered the whole page and appeared behind court opinions. Restricted the photographic asset to a 480 px home hero, masked to white; no stadium in court.
 2. P1: entrance was a small pale modal with little impact. Replaced with full-screen red/blue panels, large staggered title, a short hold, and opening seam transition. Escape and skip remain available.
 3. P1: debate had no immediately visible confrontation proportions. Added large red/blue support strip, moving seam, animated percentages and live vote counts. Neutral votes are counted separately and that denominator is stated.
-4. P2: top navigation appeared disconnected and had no selected match state inside court. Added softly tinted glass, red HU tile and active 比赛 state across match/court routes; consistent header widths.
+4. P2: top navigation appeared disconnected and had no selected match state inside court. Separated white straight-edged navigation from the solid-red score/title section; HU is a red wordmark and 比赛 is selected with a red underline. Home retains its tinted toolbar.
 5. P2: jury voting cards were visually complex. Changed to vertical single-choice rows with an explicit confirmation button. Results appear after voting; switching moves the existing vote.
 6. P2: early mobile headings split team names. Natural phrase breaks preserve 曼联; columns remain side by side for direct comparison.
 7. P2: VS touched the blue percentage. Increased seam padding on desktop and phone.
 8. P2: league icon looked decorative. Removed per final feedback.
-9. P2: Tottenham SVG contains a translucent white square, visible against red. Kept authentic vectors and introduced consistent round white crest frames with balanced padding. Final desktop evidence: `qa/court-v4-crests.png`; phone: `qa/court-v4-mobile.png`. Both render without overflow.
+9. P2: Tottenham SVG contains a translucent white square, visible against red. Removed the translucent background path and use a white Tottenham silhouette for contrast on the red score section. Manchester United’s three external white gaps are transparent while all shield and colored paths remain untouched. No white frame or multiply tint. Final evidence: `qa/HU-white-nav-red-banner-preview.png` and `qa/HU-white-nav-red-banner-mobile.png`.
 
 No known unresolved P0/P1/P2 visual or flow findings remain for this frontend prototype scope.
 
 ## Typography, color, layout, assets and copy
 
-- Heavy Chinese match/major-opinion headings, quieter body copy and smaller comments. Noto Sans SC with PingFang/system fallback. HU is a typographic italic wordmark, now on a red tile in the toolbar.
-- White body with subtle rose/blue top atmosphere, frosted toolbar, strong red match banner, red/blue proportion strip, white opinion columns and a neutral gray panel. Main opinions remain more prominent than comments.
+- Heavy Chinese match/major-opinion headings, quieter body copy and smaller comments. Noto Sans SC with PingFang/system fallback. HU is a typographic italic wordmark, on a red tile at home and directly in red on the white court navigation.
+- White body; home uses a subtle rose/blue top atmosphere and frosted toolbar; court uses one flat deep red score section, red/blue proportion strip, white opinion columns and a neutral gray panel. Main opinions remain more prominent than comments.
 - Six aligned score rows, separate court button, responsive 390 px layout; no support percentages on the home page.
 - Actual club crest SVGs loaded; Phosphor icons; original generated stadium WebP. GitHub source embeds the same WebP bytes in CSS to publish without binary upload. No screenshot used as page artwork, no fabricated league marks.
 - Short Chinese labels, visible sample-data scope, no HU 足球 suffix, Hupu branding, floor numbers or virtual currency.
