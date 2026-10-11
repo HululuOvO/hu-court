@@ -108,9 +108,9 @@ function SupportBar({ match, vote, revealed = true }) {
     <div className="support-summary">
       <div className="support-heading"><span>正反方对抗</span><small>双方支持率 · 不站队单独计入</small></div>
       <div className="duel-meter" role="img" aria-label={`正方 ${percent}%，反方 ${100 - percent}%`}>
-        <div className="duel-half affirmative" style={{ flexGrow: percent }}><span>正方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} /><small>%</small></strong></div>
+        <div className="duel-half affirmative" style={{ width: percent + "%" }}><span>正方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} /><small>%</small></strong></div>
         <span className="duel-vs" style={{ left: percent + "%" }}>VS</span>
-        <div className="duel-half opposing" style={{ flexGrow: 100 - percent }}><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} /><small>%</small></strong><span>反方</span></div>
+        <div className="duel-half opposing" style={{ width: (100 - percent) + "%" }}><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} /><small>%</small></strong><span>反方</span></div>
       </div>
       <div className="support-counts"><span><AnimatedNumber animateOnMount value={revealed ? red : 0} /> 人支持正方</span><span><AnimatedNumber animateOnMount value={revealed ? blue : 0} /> 人支持反方</span></div>
     </div>
