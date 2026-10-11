@@ -21,11 +21,13 @@ const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
 function Crest({ team, large = false }) {
   return (
-    <img
-      className={"crest " + (large ? "large" : "")}
-      src={"https://crests.football-data.org/" + team.id + ".svg"}
-      alt={team.name + "队徽"}
-    />
+    <span className={"crest-frame" + (large ? " large" : "")}>
+      <img
+        className={"crest " + (large ? "large" : "")}
+        src={"https://crests.football-data.org/" + team.id + ".svg"}
+        alt={team.name + "队徽"}
+      />
+    </span>
   );
 }
 function Badge({ match, now }) {
