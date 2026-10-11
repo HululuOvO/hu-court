@@ -1,5 +1,15 @@
 # HU design QA
 
+## 2026-10-11 17:35 · Reference-driven refinement
+
+- Source: user-provided Screenshot 2026-10-11 at 17.31.44.png. Matched bright red #cf0000 / blue #245eaf, diagonal banner texture and a large scale watermark. Branding remains HU, not the source’s JRs mark.
+- Smaller and taller HU vector, 52px desktop / 43px phone. Centered 赛后小法庭 and match topic above scoreboard. Countdown and a top-five comment ticker below; likes derive from the same interactive sample comments. Ticker cycles every 4.5s and pauses on hover/focus; pulsing open-state dot.
+- Restored modest opposing color blocks: 60px desktop / 48px phone, 28px / 24px percentage figures at weight 500, VS centered on the actual proportional seam. Values count up over 720ms rather than oversized static typography.
+- Opening: same-red upper and lower curtains, small balancing scale, fixed title and small 全体起立. Curtains separate vertically onto the rendered court. 2.6s, static 0.5s reduced-motion alternative. No red/blue blending, duplicate titles or intermediate page.
+- Featured most-liked comment beneath each position has real shared-state likes and 反驳 submission. Form IDs use React useId to avoid duplicates with the inline feed.
+- Browser verified: featured like 1286→1287, mirrored in the regular feed; submitted rebuttal, replies 3→4 and exact text visible. Entered 巴萨 via other matches; court topic changed correctly. Phone 390×844: no body overflow, 48px colored meter, 24px figures, 43px logo, live-dot animation present.
+- Production build passed. Existing worker and 12-hour timing checks are retained; hosting files unchanged.
+
 ## Current revision · 2026-10-11 17:20
 
 User references: cropped oversized support bar at 17:17:41 and overlapping opening titles at 17:18:02. References are internal only; the desktop reference contains personal content and is not published.
