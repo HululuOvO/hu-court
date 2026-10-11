@@ -4,6 +4,9 @@ const start = Date.now();
 export const WINDOW = 12 * 3600000;
 const t = (name, id, players, crest) => ({ name, id, crest, players: players.split("、") });
 export const teams = {
+  marseille: t("马赛", "marseille", "鲁利、巴列尔迪、科尼利厄斯、穆里略、梅林、霍伊别尔、朗吉耶、拉比奥、格林伍德、路易斯·恩里克、古伊里", "https://a.espncdn.com/i/teamlogos/soccer/500/176.png"),
+  lyon: t("里昂", "lyon", "佩里、梅特兰·奈尔斯、马塔、尼亚卡特、塔利亚菲科、马蒂奇、托利索、韦勒图、切尔基、福法纳、米卡乌塔泽", "https://a.espncdn.com/i/teamlogos/soccer/500/167.png"),
+  monaco: t("摩纳哥", "monaco", "马耶茨基、万德松、辛戈、科雷尔、卡约·恩里克、扎卡里亚、卡马拉、戈洛温、阿克利乌什、南野拓实、恩博洛", "https://a.espncdn.com/i/teamlogos/soccer/500/174.png"),
   bayern: t("拜仁慕尼黑", "bayern", "诺伊尔、莱默尔、于帕梅卡诺、金玟哉、戴维斯、基米希、帕夫洛维奇、穆西亚拉、奥利塞、格纳布里、凯恩", "https://a.espncdn.com/i/teamlogos/soccer/500/132.png"),
   dortmund: t("多特蒙德", "dortmund", "科贝尔、瑞尔森、安东、施洛特贝克、本塞拜尼、萨比策、恩梅查、布兰特、阿德耶米、吉滕斯、吉拉西", "https://a.espncdn.com/i/teamlogos/soccer/500/124.png"),
   leipzig: t("莱比锡", "leipzig", "古拉西、亨里希斯、奥尔班、卢克巴、劳姆、海达拉、施拉格尔、西蒙斯、鲍姆加特纳、奥蓬达、塞斯科", "https://a.espncdn.com/i/teamlogos/soccer/500/11420.png"),
@@ -244,6 +247,15 @@ export const matches = [
     stats: [[51,49,"控球率",true],[14,12,"射门"],[6,3,"射正"],[5,5,"角球"]], votes: [208,96,38],
   },
 
+  {
+    id: "m15", league: "法甲", home: "psg", away: "marseille", score: [2,1], state: "finished", demoStatus: "open",
+    topic: "赢下焦点战，巴黎的表现够有说服力吗？",
+    red: "进攻够精彩，这场值得夸。", blue: "赢球之外，防守还得更稳。",
+    redBody: "前场跑动和中场衔接更流畅，两粒进球是配合的回报。", blueBody: "领先后的防线保护仍有问题，胜利不能遮住最后阶段的被动。",
+    goals: [[25,"home","登贝莱"],[54,"away","格林伍德"],[77,"home","巴尔科拉"]],
+    stats: [[61,39,"控球率",true],[18,10,"射门"],[7,4,"射正"],[6,3,"角球"]], votes: [167,104,39],
+  },
+  {id: "m16", league: "法甲", home: "lyon", away: "monaco", score: null, state: "scheduled", goals: [], stats: [], votes: [0,0,0]},
 ];
 export const courtState = (m, now = Date.now()) =>
   m.state !== "finished"
@@ -257,6 +269,8 @@ export const courtState = (m, now = Date.now()) =>
 export const demoRemaining = (startedAt, now = Date.now()) =>
   WINDOW - (Math.max(0, now - startedAt) % WINDOW);
 const fanNames = {
+  psg: ["王子公园晚班", "巴黎的中场节拍", "登贝莱的加速键"],
+  marseille: ["维洛德罗姆第十二人", "马赛看台的风", "格林伍德的左脚"],
   united: ["弗格森的口香糖", "梦剧场补时员", "布鲁诺传球频道"],
   liverpool: ["安菲尔德夜班", "萨拉赫的左脚", "克洛普的眼镜"],
   arsenal: ["温格的长款羽绒服", "酋长球场第九排", "萨卡的右边路"],

@@ -19,6 +19,7 @@ import {
 import { matches, teams, courtState, makeComments, demoRemaining } from "./data";
 import { courtCrests } from "./crest-assets";
 import { leagues, standingsSnapshot } from "./standings-data";
+import { Community, News, Scorers, QualificationLegend, rankZone } from "./ContentPages";
 const sides = { red: "正方", blue: "反方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
@@ -179,7 +180,7 @@ export function App() {
     const timer = setTimeout(() => {
       setIntro(null);
       go("court/" + intro.id);
-    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2600);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 1800);
     return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
@@ -267,9 +268,9 @@ export function App() {
             >
               比赛
             </a>
-            <a className={route[0] === "standings" ? "selected" : ""} href="#/standings">积分榜</a>
-            <button disabled title="社区规划中">社区</button>
-            <button disabled title="资讯规划中">资讯</button>
+            <a className={["standings", "scorers"].includes(route[0]) ? "selected" : ""} href="#/standings">积分榜</a>
+            <a className={route[0] === "community" ? "selected" : ""} href="#/community">社区</a>
+            <a className={route[0] === "news" ? "selected" : ""} href="#/news">资讯</a>
             <a
               className={route[0] === "following" ? "selected" : ""}
               href="#/following"
@@ -289,7 +290,13 @@ export function App() {
           </button>
         </header>
         <main ref={mainRef} tabIndex={-1}>
-          {route[0] === "standings" ? (
+          {route[0] === "community" ? (
+            <Community topicId={route[1]} comments={comments} liked={liked} like={like} addComment={addComment} addReply={addReply} enter={enter} Thread={Thread} Crest={Crest} />
+          ) : route[0] === "news" ? (
+            <News articleId={route[1]} enter={enter} />
+          ) : route[0] === "scorers" ? (
+            <Scorers leagueId={route[1]} Crest={Crest} />
+          ) : route[0] === "standings" ? (
             <Standings leagueId={route[1]} />
           ) : home ? (
             <Home
@@ -334,7 +341,7 @@ export function App() {
         </main>
         <footer>
           <span className="footer-brand">HU</span>
-          <span>{route[0] === "standings" ? "积分榜 · ESPN 数据快照" : "示例比赛 · 前端互动体验"}</span>
+          <span>{route[0] === "standings" ? "积分榜 · ESPN 数据快照" : ["community", "news"].includes(route[0]) ? "中文内容 · 初版体验" : route[0] === "scorers" ? "射手榜 · 示例比赛统计" : "示例比赛 · 前端互动体验"}</span>
           <span>发言和投票仅保留在本次体验</span>
         </footer>
       </div>
@@ -447,18 +454,20 @@ function Standings({ leagueId }) {
   const league = leagues.find((l) => l.id === leagueId) || leagues[0];
   return <section className="standings-page">
     <div className="standings-page-heading"><div><p className="eyebrow">2026–27 赛季</p><h1>积分榜</h1></div><span>更新于 {standingsSnapshot}</span></div>
+    <nav className="ranking-kind" aria-label="选择榜单"><a className="selected" href={"#/standings/" + league.id} aria-current="page">积分榜</a><a href={"#/scorers/" + league.id}>射手榜</a></nav>
     <nav className="standings-tabs" aria-label="选择积分榜赛事">
       {leagues.map((l) => <a className={league.id === l.id ? "selected" : ""} aria-current={league.id === l.id ? "page" : undefined} key={l.id} href={"#/standings/" + l.id}><LeagueLogo league={l} /><span>{l.name}</span></a>)}
     </nav>
     <div className="standings-table-panel panel">
-      <header><LeagueLogo league={league} /><div><h2>{league.name}{league.id === "uefa.champions" ? " · 联赛阶段" : ""}</h2><p>{league.displayName}</p></div><span>{league.teams.length} 支球队</span></header>
+      <header><LeagueLogo league={league} /><div><h2>{league.name}{league.id === "uefa.champions" ? " · 联赛阶段" : ""}</h2><p>{league.id === "uefa.champions" ? "联赛阶段排名" : "积分与净胜球"}</p></div><span>{league.teams.length} 支球队</span></header>
       <button className="standings-expand" onClick={() => setFullStats((v) => !v)} aria-pressed={fullStats}>{fullStats ? "收起详细数据" : "展开完整数据"} <CaretDown size={14} /></button>
       <div className={"standings-scroll" + (fullStats ? " full-stats" : "")} role="region" aria-label={league.name + "完整积分榜，可横向滚动"} tabIndex={0}>
         <table><caption className="sr-only">{league.name} 2026–27 积分榜，数据快照 {standingsSnapshot}</caption>
           <thead><tr><th scope="col">排名</th><th scope="col">球队</th><th scope="col">场次</th><th scope="col" className="detail-stat">胜</th><th scope="col" className="detail-stat">平</th><th scope="col" className="detail-stat">负</th><th scope="col" className="detail-stat">进 / 失</th><th scope="col">净胜球</th><th scope="col">积分</th></tr></thead>
-          <tbody>{league.teams.map((t) => <tr key={t.id}><td><span className={"table-rank" + (t.rank <= 3 ? " top" : "")}>{t.rank}</span></td><th scope="row"><div className="standings-team"><img src={t.logo} alt="" loading="lazy" /><span title={t.originalName}>{t.name}</span></div></th><td>{t.played}</td><td className="detail-stat">{t.won}</td><td className="detail-stat">{t.drawn}</td><td className="detail-stat">{t.lost}</td><td className="detail-stat">{t.for} / {t.against}</td><td>{t.difference > 0 ? "+" : ""}{t.difference}</td><td className="table-points">{t.points}</td></tr>)}</tbody>
+          <tbody>{league.teams.map((t) => <tr key={t.id} className={"rank-zone " + rankZone(league.id, t.rank).className}><td><span className="table-rank" title={rankZone(league.id, t.rank).label}>{t.rank}</span></td><th scope="row"><div className="standings-team"><img src={t.logo} alt="" loading="lazy" /><span title={t.originalName}>{t.name}</span></div></th><td>{t.played}</td><td className="detail-stat">{t.won}</td><td className="detail-stat">{t.drawn}</td><td className="detail-stat">{t.lost}</td><td className="detail-stat">{t.for} / {t.against}</td><td>{t.difference > 0 ? "+" : ""}{t.difference}</td><td className="table-points">{t.points}</td></tr>)}</tbody>
         </table>
       </div>
+      <QualificationLegend leagueId={league.id} />
       <div className="standings-source"><span>数据快照 · {standingsSnapshot} · 非实时更新</span><a href={league.source} target="_blank" rel="noreferrer">数据来源 ESPN <ArrowUpRight size={14} /></a></div>
     </div>
   </section>;
@@ -501,7 +510,7 @@ function Home({ followed, following, now, enter, follow }) {
         </a>)}
       </nav>}
       {visible.length ? (
-        ["欧冠", "英超", "西甲", "德甲", "意甲"].map((league) => {
+        ["欧冠", "英超", "西甲", "德甲", "意甲", "法甲"].map((league) => {
           const group = visible.filter((m) => m.league === league);
           return group.length ? (
             <section
@@ -510,6 +519,7 @@ function Home({ followed, following, now, enter, follow }) {
               key={league}
               aria-label={league + "比赛"}
             >
+              <img className="league-watermark" src={leagues.find((l) => l.name === league).logo} alt="" aria-hidden="true" />
               <h2>
                 <LeagueLogo league={leagues.find((l) => l.name === league)} />
                 {league}
@@ -903,7 +913,7 @@ function Court({
                 key={side}
               >
                 <div className="opinion-meta">
-                  <span>{sides[side]}观点</span>
+                  <span><Fire className="argument-flame" size={16} weight="fill" aria-hidden="true" />{sides[side]}观点</span>
                   <span className="opinion-support"><AnimatedNumber value={match.votes[side === "red" ? 0 : 1] + (vote === (side === "red" ? 0 : 1) ? 1 : 0)} /> 人支持</span>
                 </div>
                 <h2>
