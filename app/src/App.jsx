@@ -17,18 +17,20 @@ import {
 } from "@phosphor-icons/react";
 import { matches, teams, courtState, makeComments, WINDOW } from "./data";
 import { courtCrests } from "./crest-assets";
+import { leagues, standingsSnapshot } from "./standings-data";
 const sides = { red: "红方", blue: "蓝方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
 function HUWordmark() {
-  return (
-    <svg className="hu-wordmark" viewBox="0 0 120 54" aria-hidden="true" focusable="false">
-      <g transform="skewX(-8)" fill="currentColor">
-        <path d="M12 4H22V21H44V4H54V50H44V31H22V50H12Z" />
-        <path d="M61 4H72V29C72 37 77 40 85.5 40C94 40 99 37 99 29V4H110V30C110 44 101 51 85.5 51C70 51 61 44 61 30Z" />
-      </g>
-    </svg>
-  );
+  return <svg className="hu-wordmark" viewBox="0 0 88 48" aria-hidden="true" focusable="false">
+    <g fill="currentColor">
+      <path d="M4 5h6v16h25V5h6v38h-6V27H10v16H4Z" />
+      <path d="M49 5h6v23c0 8 4 11 11 11s11-3 11-11V5h6v23c0 12-6 17-17 17S49 40 49 28Z" />
+    </g>
+  </svg>;
+}
+function LeagueLogo({ league }) {
+  return <img className="league-logo" src={league.logo} alt={league.name + "标识"} />;
 }
 function Crest({ team, large = false, court = false }) {
   return (
@@ -74,9 +76,10 @@ function OpinionTitle({ text }) {
     </>
   );
 }
-function AnimatedNumber({ value }) {
-  const [display, setDisplay] = useState(value);
-  const previous = useRef(value);
+function AnimatedNumber({ value, animateOnMount = false }) {
+  const initial = animateOnMount && !window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : value;
+  const [display, setDisplay] = useState(initial);
+  const previous = useRef(initial);
   useEffect(() => {
     const from = previous.current;
     previous.current = value;
@@ -96,7 +99,7 @@ function AnimatedNumber({ value }) {
   }, [value]);
   return display.toLocaleString("zh-CN");
 }
-function SupportBar({ match, vote }) {
+function SupportBar({ match, vote, revealed = true }) {
   const red = match.votes[0] + (vote === 0 ? 1 : 0);
   const blue = match.votes[1] + (vote === 1 ? 1 : 0);
   const percent = red + blue ? Math.round(red / (red + blue) * 100) : 50;
@@ -104,8 +107,8 @@ function SupportBar({ match, vote }) {
     <div className="support-summary">
       <div className="support-heading"><span>红蓝对抗</span><small>双方支持率 · 中立票单独计入</small></div>
       <div className="support-bar" role="img" aria-label={`红方 ${percent}%，蓝方 ${100 - percent}%`}>
-        <div className="support-red" style={{ width: percent + "%" }}><span>红方</span><strong><AnimatedNumber value={percent} />%</strong></div>
-        <div className="support-blue" style={{ width: 100 - percent + "%" }}><strong><AnimatedNumber value={100 - percent} />%</strong><span>蓝方</span></div>
+        <div className="support-red" style={{ width: percent + "%" }}><span>红方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} />%</strong></div>
+        <div className="support-blue" style={{ width: 100 - percent + "%" }}><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} />%</strong><span>蓝方</span></div>
         <span className="support-vs" style={{ left: percent + "%" }}>VS</span>
       </div>
       <div className="support-counts"><span><AnimatedNumber value={red} /> 人支持红方</span><span><AnimatedNumber value={blue} /> 人支持蓝方</span></div>
@@ -167,7 +170,7 @@ export function App() {
     const timer = setTimeout(() => {
       setIntro(null);
       go("court/" + intro.id);
-    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2400);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 3600);
     return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
@@ -177,7 +180,7 @@ export function App() {
     if (route.length && !intro) mainRef.current?.focus({ preventScroll: true });
   }, [route.join("/"), intro]);
   const match = matches.find((m) => m.id === route[1]),
-    home = route[0] !== "match" && route[0] !== "court";
+    home = !route[0] || route[0] === "following";
   const enter = (m) => {
     const s = courtState(m, now);
     if (s === "open") {
@@ -208,6 +211,7 @@ export function App() {
           text,
           likes: 0,
           time: "刚刚",
+          createdAt: Date.now(),
           replies: [],
         },
         ...c[id],
@@ -236,18 +240,21 @@ export function App() {
     <>
       <div className="site-atmosphere" aria-hidden="true" />
       {home && <div className="stadium-background" aria-hidden="true" />}
-      <div className={"site-shell " + (route[0] === "court" ? "court-shell" : "")}>
+      <div className={"site-shell " + (route[0] === "court" ? "court-shell" : "")} inert={intro ? true : undefined}>
         <header className="topbar glass">
           <a className="brand" href="#/" aria-label="HU 首页">
             <HUWordmark />
           </a>
           <nav className="main-nav" aria-label="主导航">
             <a
-              className={route[0] !== "following" ? "selected" : ""}
+              className={!route[0] || ["match", "court"].includes(route[0]) ? "selected" : ""}
               href="#/"
             >
               比赛
             </a>
+            <a className={route[0] === "standings" ? "selected" : ""} href="#/standings">积分榜</a>
+            <button disabled title="社区规划中">社区</button>
+            <button disabled title="资讯规划中">资讯</button>
             <a
               className={route[0] === "following" ? "selected" : ""}
               href="#/following"
@@ -267,7 +274,9 @@ export function App() {
           </button>
         </header>
         <main ref={mainRef} tabIndex={-1}>
-          {home ? (
+          {route[0] === "standings" ? (
+            <Standings leagueId={route[1]} />
+          ) : home ? (
             <Home
               followed={followed}
               following={route[0] === "following"}
@@ -291,6 +300,7 @@ export function App() {
             />
           ) : (
             <Court
+              opening={!!intro}
               match={match}
               now={now}
               section={route[2] || "debate"}
@@ -306,7 +316,7 @@ export function App() {
         </main>
         <footer>
           <span className="footer-brand">HU</span>
-          <span>示例数据 · 前端互动体验</span>
+          <span>{route[0] === "standings" ? "积分榜 · ESPN 数据快照" : "示例比赛 · 前端互动体验"}</span>
           <span>发言和投票仅保留在本次体验</span>
         </footer>
       </div>
@@ -336,8 +346,8 @@ export function App() {
             <span className="brand"><HUWordmark /></span>
             <span className="entrance-side entrance-side-red">红方</span>
             <span className="entrance-side entrance-side-blue">蓝方</span>
-            <span className="entrance-kicker">现在</span>
-            <h2 aria-label="现在开庭"><span>开</span><span>庭</span></h2>
+            <h2 aria-label="赛后开庭，全体起立"><span className="opening-first" aria-hidden="true">赛后开庭</span><span className="opening-next" aria-hidden="true">全体起立</span></h2>
+            <p className="entrance-subtitle">全体起立</p>
             <p className="entrance-matchup">
               {teams[intro.home].name} <span>VS</span> {teams[intro.away].name}
             </p>
@@ -418,6 +428,27 @@ export function App() {
     </>
   );
 }
+function Standings({ leagueId }) {
+  const [fullStats, setFullStats] = useState(false);
+  const league = leagues.find((l) => l.id === leagueId) || leagues[0];
+  return <section className="standings-page">
+    <div className="standings-page-heading"><div><p className="eyebrow">2026–27 赛季</p><h1>积分榜</h1></div><span>更新于 {standingsSnapshot}</span></div>
+    <nav className="standings-tabs" aria-label="选择积分榜赛事">
+      {leagues.map((l) => <a className={league.id === l.id ? "selected" : ""} aria-current={league.id === l.id ? "page" : undefined} key={l.id} href={"#/standings/" + l.id}><LeagueLogo league={l} /><span>{l.name}</span></a>)}
+    </nav>
+    <div className="standings-table-panel panel">
+      <header><LeagueLogo league={league} /><div><h2>{league.name}{league.id === "uefa.champions" ? " · 联赛阶段" : ""}</h2><p>{league.displayName}</p></div><span>{league.teams.length} 支球队</span></header>
+      <button className="standings-expand" onClick={() => setFullStats((v) => !v)} aria-pressed={fullStats}>{fullStats ? "收起详细数据" : "展开完整数据"} <CaretDown size={14} /></button>
+      <div className={"standings-scroll" + (fullStats ? " full-stats" : "")} role="region" aria-label={league.name + "完整积分榜，可横向滚动"} tabIndex={0}>
+        <table><caption className="sr-only">{league.name} 2026–27 积分榜，数据快照 {standingsSnapshot}</caption>
+          <thead><tr><th scope="col">排名</th><th scope="col">球队</th><th scope="col">场次</th><th scope="col" className="detail-stat">胜</th><th scope="col" className="detail-stat">平</th><th scope="col" className="detail-stat">负</th><th scope="col" className="detail-stat">进 / 失</th><th scope="col">净胜球</th><th scope="col">积分</th></tr></thead>
+          <tbody>{league.teams.map((t) => <tr key={t.id}><td><span className={"table-rank" + (t.rank <= 3 ? " top" : "")}>{t.rank}</span></td><th scope="row"><div className="standings-team"><img src={t.logo} alt="" loading="lazy" /><span title={t.originalName}>{t.name}</span></div></th><td>{t.played}</td><td className="detail-stat">{t.won}</td><td className="detail-stat">{t.drawn}</td><td className="detail-stat">{t.lost}</td><td className="detail-stat">{t.for} / {t.against}</td><td>{t.difference > 0 ? "+" : ""}{t.difference}</td><td className="table-points">{t.points}</td></tr>)}</tbody>
+        </table>
+      </div>
+      <div className="standings-source"><span>数据快照 · {standingsSnapshot} · 非实时更新</span><a href={league.source} target="_blank" rel="noreferrer">数据来源 ESPN <ArrowUpRight size={14} /></a></div>
+    </div>
+  </section>;
+}
 function Home({ followed, following, now, enter, follow }) {
   const [filter, setFilter] = useState("all");
   const visible = matches.filter(
@@ -450,6 +481,11 @@ function Home({ followed, following, now, enter, follow }) {
           </label>
         </div>
       </section>
+      {!following && <nav className="competition-strip" aria-label="赛事积分榜">
+        {leagues.map((league) => <a key={league.id} href={"#/standings/" + league.id}>
+          <LeagueLogo league={league} /><span>{league.name}</span><ArrowUpRight size={14} />
+        </a>)}
+      </nav>}
       {visible.length ? (
         ["英超", "西甲"].map((league) => {
           const group = visible.filter((m) => m.league === league);
@@ -460,8 +496,10 @@ function Home({ followed, following, now, enter, follow }) {
               aria-label={league + "比赛"}
             >
               <h2>
+                <LeagueLogo league={leagues.find((l) => l.name === league)} />
                 {league}
                 <span>{group.length}场</span>
+                <a className="league-table-link" href={"#/standings/" + leagues.find((l) => l.name === league).id}>积分榜 <ArrowUpRight size={14} /></a>
               </h2>
               {group.map((m) => (
                 <article className="match-row" key={m.id}>
@@ -737,6 +775,7 @@ function MatchDetail({ match, now, tab, enter, follow, followed }) {
   );
 }
 function Court({
+  opening = false,
   match,
   now,
   section,
@@ -815,7 +854,7 @@ function Court({
         />
       ) : (
         <section className="debate-entry">
-          <SupportBar match={match} vote={vote} />
+          <SupportBar match={match} vote={vote} revealed={!opening} />
           <div className="opinion-grid">
             {["red", "blue"].map((side) => (
               <a
@@ -847,11 +886,7 @@ function Court({
             </div>
             <ArrowUpRight size={28} />
           </a>
-          <a className="hot-entry" href={"#/court/" + match.id + "/hot"}>
-            <ChatCircle size={21} />
-            看看热评 <span>{comments.length}条发言</span>
-            <ArrowRight size={18} />
-          </a>
+          <Thread embedded match={match} side="hot" comments={comments} liked={liked} like={like} addComment={addComment} addReply={addReply} closed={closed} />
         </section>
       )}
     </>
@@ -970,6 +1005,7 @@ function Records({ match, vote, closed, now }) {
   );
 }
 function Thread({
+  embedded = false,
   match,
   side,
   comments,
@@ -981,17 +1017,18 @@ function Thread({
 }) {
   const [sort, setSort] = useState(side === "hot" ? "hot" : "latest"),
     [text, setText] = useState(""),
-    [opinion, setOpinion] = useState(side === "hot" ? "neutral" : side);
+    [opinion, setOpinion] = useState(side === "hot" ? "neutral" : side),
+    [showComposer, setShowComposer] = useState(!embedded);
   const list = comments
     .filter((c) => side === "hot" || c.side === side)
     .sort((a, b) =>
       sort === "hot"
         ? b.likes + (liked[b.id] ? 1 : 0) - (a.likes + (liked[a.id] ? 1 : 0))
-        : 0,
+        : (b.createdAt || 0) - (a.createdAt || 0),
     );
   return (
-    <section className="thread-view">
-      <a className="back-link" href={"#/court/" + match.id + "/debate"}>
+    <section className={"thread-view" + (embedded ? " embedded-thread" : "")}>
+      {!embedded && <><a className="back-link" href={"#/court/" + match.id + "/debate"}>
         <ArrowLeft size={17} />
         所有观点
       </a>
@@ -1005,11 +1042,14 @@ function Thread({
               : match[side]}
         </h2>
       </div>
+      </>}
       <div className="panel comments-panel">
         <div className="comments-title">
           <h3>
-            讨论 <span>{list.length}</span>
+            {embedded ? "大家怎么说" : "讨论"} <span>{list.length}条发言</span>
           </h3>
+          <div className="comment-toolbar">
+          {embedded && !closed && <button className="write-opinion" onClick={() => setShowComposer((v) => !v)} aria-expanded={showComposer}>发表意见 <ArrowUpRight size={15} /></button>}
           <div className="sort-controls" aria-label="评论排序">
             <button
               className={sort === "hot" ? "selected" : ""}
@@ -1024,8 +1064,9 @@ function Thread({
               最新
             </button>
           </div>
+          </div>
         </div>
-        {!closed && (
+        {!closed && showComposer && (
           <form
             className="composer"
             onSubmit={(e) => {
@@ -1033,6 +1074,7 @@ function Thread({
               if (text.trim()) {
                 addComment(match.id, opinion, text.trim());
                 setText("");
+                setSort("latest");
               }
             }}
           >
