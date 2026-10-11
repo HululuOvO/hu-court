@@ -20,6 +20,16 @@ import { courtCrests } from "./crest-assets";
 const sides = { red: "红方", blue: "蓝方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
+function HUWordmark() {
+  return (
+    <svg className="hu-wordmark" viewBox="0 0 120 54" aria-hidden="true" focusable="false">
+      <g transform="skewX(-8)" fill="currentColor">
+        <path d="M12 4H26V20H43V4H57V50H43V33H26V50H12Z" />
+        <path d="M65 4H79V29C79 36 82 39 88 39C94 39 98 36 98 29V4H112V30C112 44 103 51 88 51C74 51 65 44 65 30Z" />
+      </g>
+    </svg>
+  );
+}
 function Crest({ team, large = false, court = false }) {
   return (
     <span className={"crest-frame" + (large ? " large" : "")}>
@@ -226,7 +236,7 @@ export function App() {
       <div className={"site-shell " + (route[0] === "court" ? "court-shell" : "")}>
         <header className="topbar glass">
           <a className="brand" href="#/" aria-label="HU 首页">
-            HU
+            <HUWordmark />
           </a>
           <nav className="main-nav" aria-label="主导航">
             <a
