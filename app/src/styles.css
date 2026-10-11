@@ -2188,13 +2188,71 @@ footer span:last-child {
 
 .site-shell { padding-top: 0; position: relative; isolation: isolate; }
 .topbar::before { content: ''; position: absolute; top: 0; bottom: 0; left: calc(50% - 50vw); width: 100vw; background: white; z-index: -1; }
-.topbar .brand { width: 112px; height: 54px; padding: 0; transform: none; }
-.hu-wordmark { display: block; width: 112px; height: 54px; flex: none; }
+.topbar .brand { width: 92px; height: 44px; padding: 0; transform: none; }
+.hu-wordmark { display: block; width: 92px; height: 44px; flex: none; }
 .court-shell .topbar { margin-bottom: 0; }
 .home-hero { padding-left: 0; padding-right: 0; }
 .home-hero .eyebrow { color: #687080; }
 @media (max-width: 700px) {
-  .topbar .brand { width: 86px; height: 44px; }
-  .hu-wordmark { width: 86px; height: 44px; }
+  .topbar .brand { width: 72px; height: 36px; }
+  .hu-wordmark { width: 72px; height: 36px; }
   .court-shell .topbar { margin-bottom: 0; }
 }
+
+/* Red and blue strike the seam, hold the court title, then open to the debate. */
+.court-entrance { --opening-time: 2.4s; background: #111723; animation: court-backdrop var(--opening-time) step-end both; }
+.entrance-red, .entrance-blue { width: calc(50% + 1px); top: 0; bottom: 0; transform: none; }
+.entrance-red { left: 0; background: #cb1f32; transform-origin: center; animation: court-red-collision var(--opening-time) cubic-bezier(.22,.8,.2,1) both; }
+.entrance-blue { right: 0; background: #245caf; transform-origin: center; animation: court-blue-collision var(--opening-time) cubic-bezier(.22,.8,.2,1) both; }
+.entrance-seam { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: #ffffff; transform: translateX(-50%); animation: court-seam-flash var(--opening-time) ease both; }
+.entrance-screen { padding: 32px; gap: 0; animation: court-title-reveal var(--opening-time) ease both; }
+.entrance-screen .brand { top: 36px; left: 4.5vw; }
+.entrance-screen .hu-wordmark { width: 72px; height: 36px; }
+.entrance-kicker { font-size: 19px; letter-spacing: 10px; padding-left: 10px; opacity: .8; margin-bottom: 13px; }
+.entrance-screen h2 { display: flex; gap: 44px; font-size: clamp(112px, 12vw, 180px); line-height: 1.2; letter-spacing: -7px; text-shadow: none; margin: 0; }
+.entrance-screen h2 > span, .entrance-screen h2 > span:last-child { display: block; animation: none; }
+.entrance-matchup { margin-top: 25px; font-size: 20px; font-weight: 600; letter-spacing: 1px; }
+.entrance-screen .entrance-matchup > span { color: #ffffffb8; margin: 0 25px; font: 800 italic 15px Arial, sans-serif; }
+.entrance-side { position: absolute; top: 50%; transform: translateY(-50%); font-size: 14px; font-weight: 650; letter-spacing: 4px; opacity: .65; }
+.entrance-side-red { left: 6vw; }
+.entrance-side-blue { right: 6vw; }
+.entrance-screen > button { bottom: 36px; font-size: 13px; padding: 12px; }
+@keyframes court-red-collision {
+  0% { transform: translateX(-102%); } 22% { transform: translateX(0); }
+  27% { transform: translateX(-2%); } 34%, 77% { transform: translateX(0); }
+  100% { transform: translateX(-102%); }
+}
+@keyframes court-blue-collision {
+  0% { transform: translateX(102%); } 22% { transform: translateX(0); }
+  27% { transform: translateX(2%); } 34%, 77% { transform: translateX(0); }
+  100% { transform: translateX(102%); }
+}
+@keyframes court-seam-flash {
+  0%, 19% { opacity: 0; scale: 1 0; } 23% { opacity: .95; scale: 1 1; }
+  33%, 77% { opacity: .22; scale: 1 1; } 92%, 100% { opacity: 0; }
+}
+@keyframes court-title-reveal {
+  0%, 20% { opacity: 0; transform: scale(.94); }
+  34%, 77% { opacity: 1; transform: scale(1); }
+  95%, 100% { opacity: 0; transform: scale(1.05); }
+}
+@media (max-width: 700px) {
+  .entrance-screen { padding: 20px; }
+  .entrance-screen .brand { top: 25px; left: 24px; }
+  .entrance-screen .hu-wordmark { width: 62px; height: 32px; }
+  .entrance-kicker { font-size: 15px; margin-bottom: 9px; }
+  .entrance-screen h2 { font-size: 112px; gap: 22px; letter-spacing: -5px; }
+  .entrance-matchup { margin-top: 19px; font-size: 16px; }
+  .entrance-side { top: auto; bottom: 23%; font-size: 12px; }
+  .entrance-side-red { left: 22%; }
+  .entrance-side-blue { right: 22%; }
+  .entrance-screen > button { bottom: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .entrance-red, .entrance-blue, .entrance-seam, .entrance-screen { animation: none; }
+  .entrance-screen { opacity: 1; transform: none; }
+  .entrance-seam { opacity: .2; }
+}
+
+@keyframes court-backdrop { 0%, 76% { background: #111723; } 77%, 100% { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .court-entrance { animation: none; } }
