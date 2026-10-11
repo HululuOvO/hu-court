@@ -25,6 +25,7 @@ Requested deviations are implemented: HU only; red controls; stadium only in the
 6. P2: early mobile headings split team names. Natural phrase breaks preserve 曼联; columns remain side by side for direct comparison.
 7. P2: VS touched the blue percentage. Increased seam padding on desktop and phone.
 8. P2: league icon looked decorative. Removed per final feedback.
+9. P2: Tottenham SVG contains a translucent white square, visible against red. Kept authentic vectors and introduced consistent round white crest frames with balanced padding. Final desktop evidence: `qa/court-v4-crests.png`; phone: `qa/court-v4-mobile.png`. Both render without overflow.
 
 No known unresolved P0/P1/P2 visual or flow findings remain for this frontend prototype scope.
 
