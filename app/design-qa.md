@@ -56,3 +56,15 @@ This is a frontend prototype with clearly labelled sample fixtures. Comments, vo
 Latest home/logo evidence: `qa/HU-home-wordmark-desktop.png` and `qa/HU-home-wordmark-mobile.png`. HU letterforms replace the rounded red tile. Latest feedback reduces strokes from 14 to 10–11 vector units and display width to 92px desktop / 72px phone. Current evidence: `qa/HU-refined-wordmark.png`.
 
 Opening evidence: `qa/HU-opening-collision.png`, `qa/HU-opening-collision-mobile.png`. Phone 390px has no horizontal overflow. Click-to-court opens underneath the animation; 2.4s auto completion, skip button and Escape preserve navigation. Reduced motion is a static 0.5s introduction.
+
+## 2026-10-11 · Latest refinement
+
+- Reviewed four supplied screenshots, including the cropped support strip from 17:09:52.
+- Replaced the leaning heavy HU with a smaller upright vector wordmark, 66px desktop / 53px phone.
+- Entry: red/blue collision, a medium-weight 赛后开庭, small 全体起立, then a separate 全体起立 title and outward reveal. 3.6 seconds; static 0.5 seconds for reduced motion. Underlying page is inert until completion; Escape skips.
+- Support strip reduced to 92px desktop / 62px phone, with smaller medium-weight percentages. Counts animate after the entrance and when voting changes.
+- Debate landing directly shows 18 demo comments with stronger red, blue and neutral tags. Side discussions stay separate and clickable. Hot/latest sorting, posting, likes, expanding replies and sending replies work.
+- Home restores league badges and adds six standings entries. Header includes disabled 社区 and 资讯.
+- Full ESPN 2026–27 standings snapshot retrieved 2026-10-11: 欧冠 36, 西甲 20, 英超 20, 德甲 18, 意甲 20, 法甲 18. Metadata, source links and non-live status shown. All records checked for unique team IDs, sequential provider ranks, played = W+D+L and goal difference = goals for − against. Do not extrapolate demo matches from standings.
+- Phone standings support a compact view and expandable full stats inside a horizontally scrollable table. At 390px, no body overflow.
+- Local checks: Vite production build; Sites worker tests 4/4; 12-hour court boundary 1/1. Browser checks: 1286→1287 like; expanded three replies; posted a new neutral comment; replied to that comment; jury red 129/blue 97 then switched to red 128/blue 98; all table counts and phone detail expansion verified.
