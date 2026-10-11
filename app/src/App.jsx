@@ -218,6 +218,7 @@ export function App() {
   };
   return (
     <>
+      <div className="site-atmosphere" aria-hidden="true" />
       {home && <div className="stadium-background" aria-hidden="true" />}
       <div className={"site-shell " + (route[0] === "court" ? "court-shell" : "")}>
         <header className="topbar glass">
@@ -226,7 +227,7 @@ export function App() {
           </a>
           <nav className="main-nav" aria-label="主导航">
             <a
-              className={home && route[0] !== "following" ? "selected" : ""}
+              className={route[0] !== "following" ? "selected" : ""}
               href="#/"
             >
               比赛
@@ -438,7 +439,6 @@ function Home({ followed, following, now, enter, follow }) {
               aria-label={league + "比赛"}
             >
               <h2>
-                <SoccerBall size={26} weight="duotone" />
                 {league}
                 <span>{group.length}场</span>
               </h2>
