@@ -211,7 +211,7 @@ export const makeComments = (m) => [
       m.id === "m1"
         ? "领先之后退得太深了，问题不是没赢，是一直没把主动权拿回来。"
         : "比分背后还有过程，前场的选择值得再看一遍。",
-    likes: 42,
+    likes: 1286,
     time: "18分钟前",
     replies: [
       {
@@ -239,7 +239,7 @@ export const makeComments = (m) => [
     side: "blue",
     name: "周末看台",
     text: "可以批评比赛，但别只拿结果下结论。把几次关键机会放在一起看，才更公平。",
-    likes: 31,
+    likes: 864,
     time: "24分钟前",
     replies: [
       { id: m.id + "r4", name: "慢镜头", text: "过程和结果都得看。", likes: 4 },
@@ -250,7 +250,7 @@ export const makeComments = (m) => [
     side: "neutral",
     name: "球场散步",
     text: "进攻效率、换人时机和最后二十分钟，我觉得这三点可以分开聊。",
-    likes: 27,
+    likes: 532,
     time: "32分钟前",
     replies: [],
   },
@@ -259,7 +259,7 @@ export const makeComments = (m) => [
     side: "red",
     name: "边线观察员",
     text: "我更在意临场调整。球员状态不好时，教练有没有及时给出变化？",
-    likes: 18,
+    likes: 219,
     time: "45分钟前",
     replies: [],
   },
@@ -268,7 +268,7 @@ export const makeComments = (m) => [
     side: "blue",
     name: "慢镜头",
     text: "有几次配合其实不错，最后一脚的处理差了一点。不是所有东西都要推倒重来。",
-    likes: 15,
+    likes: 87,
     time: "52分钟前",
     replies: [],
   },
@@ -281,4 +281,137 @@ export const makeComments = (m) => [
     time: "1小时前",
     replies: [],
   },
-];
+{
+  "id": m.id + "-7",
+  "side": "red",
+  "name": "第九排看台",
+  "text": "接受平局，不等于接受整场的处理方式。该讨论的问题还是要讨论。",
+  "likes": 63,
+  "time": "9分钟前",
+  "replies": [
+    {
+      "id": m.id + "r7",
+      "name": "路过看台",
+      "text": "把具体片段拿出来聊，确实更有意思。",
+      "likes": 2
+    }
+  ]
+},
+{
+  "id": m.id + "-8",
+  "side": "blue",
+  "name": "加时再聊",
+  "text": "有些配合是有进步的。批评可以具体一点，别一句话否定所有人。",
+  "likes": 42,
+  "time": "10分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-9",
+  "side": "neutral",
+  "name": "只聊比赛",
+  "text": "红方在说表现，蓝方在说结果，其实这两件事不冲突。",
+  "likes": 35,
+  "time": "11分钟前",
+  "replies": [
+    {
+      "id": m.id + "r9",
+      "name": "路过看台",
+      "text": "把具体片段拿出来聊，确实更有意思。",
+      "likes": 2
+    }
+  ]
+},
+{
+  "id": m.id + "-10",
+  "side": "red",
+  "name": "禁区外一脚",
+  "text": "关键时刻不敢向前，最后就只能被动应对。",
+  "likes": 24,
+  "time": "12分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-11",
+  "side": "blue",
+  "name": "周日球迷",
+  "text": "对手也在调整，不可能九十分钟都按自己的节奏踢。",
+  "likes": 16,
+  "time": "13分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-12",
+  "side": "neutral",
+  "name": "半场茶歇",
+  "text": "想听大家分析一下换人，而不是互相贴标签。",
+  "likes": 12,
+  "time": "14分钟前",
+  "replies": [
+    {
+      "id": m.id + "r12",
+      "name": "路过看台",
+      "text": "把具体片段拿出来聊，确实更有意思。",
+      "likes": 2
+    }
+  ]
+},
+{
+  "id": m.id + "-13",
+  "side": "red",
+  "name": "看台上的风",
+  "text": "下一场最想看到的是更果断的最后一脚。",
+  "likes": 7,
+  "time": "15分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-14",
+  "side": "blue",
+  "name": "后场组织",
+  "text": "先把每一次机会拆开看，至少能知道问题出在哪。",
+  "likes": 5,
+  "time": "16分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-15",
+  "side": "neutral",
+  "name": "不熬夜也看球",
+  "text": "投了不站队。两边都有我认同的地方。",
+  "likes": 3,
+  "time": "17分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-16",
+  "side": "red",
+  "name": "场边笔记",
+  "text": "今天的比赛值得复盘，期待球队给出回应。",
+  "likes": 1,
+  "time": "18分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-17",
+  "side": "blue",
+  "name": "开场哨",
+  "text": "没赢当然遗憾，但还是想多给一点耐心。",
+  "likes": 0,
+  "time": "19分钟前",
+  "replies": []
+},
+{
+  "id": m.id + "-18",
+  "side": "neutral",
+  "name": "刚到看台",
+  "text": "刚看完回放，来听听大家的观点。",
+  "likes": 0,
+  "time": "20分钟前",
+  "replies": []
+},
+
+].map((comment) => ({
+  ...comment,
+  createdAt: start - Number.parseInt(comment.time) * (comment.time.includes("小时") ? 3600000 : 60000),
+}));
