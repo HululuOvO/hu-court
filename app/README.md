@@ -1,4 +1,4 @@
-# HU
+# HU Sport Court
 
 比赛结束，聊个明白。
 
@@ -8,7 +8,7 @@ HU 是一个赛后观点互动网站的第一版前端原型。白色体育场�
 
 - 点击比分查看进球、比赛数据和示例首发。
 - 点击进入法庭，经过展开动画进入辩论席。
-- 选择红方、蓝方或不站队，再查看评论、发言、点赞和展开回复。
+- 选择正方、反方或不站队，再查看评论、发言、点赞和展开回复。
 - 陪审席投票和修改选择。每场一票，修改时不增加总票数。
 - 查看已结案的社区投票结果。
 - 预约未开赛的示例比赛，在我的关注中查看。
@@ -37,7 +37,7 @@ React + Vite；图标来自 Phosphor。入口 `src/App.jsx`，设计样式 `src/
 
 ## 部署
 
-GitHub Pages 工作流构建 `dist/client`。仓库 Settings → Pages 的 Source 设置为 GitHub Actions。网站使用 `/hu-court/` 路径及 hash 路由。
+GitHub Pages 工作流构建 `dist/client`。仓库 Settings → Pages 的 Source 设置为 GitHub Actions。网站使用 `/hu-sport-court/` 路径及 hash 路由。
 
 模板同时保留 Sites Worker 和构建元数据；没有把现有旧站点的项目 ID 写进此新项目。
 
