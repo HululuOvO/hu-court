@@ -18,7 +18,7 @@ import {
 import { matches, teams, courtState, makeComments, WINDOW } from "./data";
 import { courtCrests } from "./crest-assets";
 import { leagues, standingsSnapshot } from "./standings-data";
-const sides = { red: "红方", blue: "蓝方", neutral: "不站队", hot: "热评" };
+const sides = { red: "正方", blue: "反方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
 function HUWordmark() {
@@ -105,13 +105,17 @@ function SupportBar({ match, vote, revealed = true }) {
   const percent = red + blue ? Math.round(red / (red + blue) * 100) : 50;
   return (
     <div className="support-summary">
-      <div className="support-heading"><span>红蓝对抗</span><small>双方支持率 · 中立票单独计入</small></div>
-      <div className="support-bar" role="img" aria-label={`红方 ${percent}%，蓝方 ${100 - percent}%`}>
-        <div className="support-red" style={{ width: percent + "%" }}><span>红方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} />%</strong></div>
-        <div className="support-blue" style={{ width: 100 - percent + "%" }}><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} />%</strong><span>蓝方</span></div>
-        <span className="support-vs" style={{ left: percent + "%" }}>VS</span>
+      <div className="support-heading"><span>正反方对抗</span><small>双方支持率 · 不站队单独计入</small></div>
+      <div className="support-labels">
+        <div className="support-label affirmative"><span>正方</span><strong><AnimatedNumber animateOnMount value={revealed ? percent : 0} />%</strong></div>
+        <span className="support-divider">VS</span>
+        <div className="support-label opposing"><strong><AnimatedNumber animateOnMount value={revealed ? 100 - percent : 0} />%</strong><span>反方</span></div>
       </div>
-      <div className="support-counts"><span><AnimatedNumber value={red} /> 人支持红方</span><span><AnimatedNumber value={blue} /> 人支持蓝方</span></div>
+      <div className="support-track" role="img" aria-label={`正方 ${percent}%，反方 ${100 - percent}%`}>
+        <span className="support-track-red" style={{ flexGrow: percent }} />
+        <span className="support-track-blue" style={{ flexGrow: 100 - percent }} />
+      </div>
+      <div className="support-counts"><span><AnimatedNumber value={red} /> 人支持正方</span><span><AnimatedNumber value={blue} /> 人支持反方</span></div>
     </div>
   );
 }
@@ -170,7 +174,7 @@ export function App() {
     const timer = setTimeout(() => {
       setIntro(null);
       go("court/" + intro.id);
-    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 3600);
+    }, window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 2200);
     return () => clearTimeout(timer);
   }, [intro]);
   useEffect(() => {
@@ -301,6 +305,7 @@ export function App() {
           ) : (
             <Court
               opening={!!intro}
+              enter={enter}
               match={match}
               now={now}
               section={route[2] || "debate"}
@@ -339,14 +344,10 @@ export function App() {
             }
           }}
         >
-          <div className="entrance-red" aria-hidden="true" />
-          <div className="entrance-blue" aria-hidden="true" />
-          <div className="entrance-seam" aria-hidden="true" />
+          <div className="entrance-backdrop" aria-hidden="true" />
           <div className="entrance-screen">
             <span className="brand"><HUWordmark /></span>
-            <span className="entrance-side entrance-side-red">红方</span>
-            <span className="entrance-side entrance-side-blue">蓝方</span>
-            <h2 aria-label="赛后开庭，全体起立"><span className="opening-first" aria-hidden="true">赛后开庭</span><span className="opening-next" aria-hidden="true">全体起立</span></h2>
+            <h2>赛后法庭</h2>
             <p className="entrance-subtitle">全体起立</p>
             <p className="entrance-matchup">
               {teams[intro.home].name} <span>VS</span> {teams[intro.away].name}
@@ -776,6 +777,7 @@ function MatchDetail({ match, now, tab, enter, follow, followed }) {
 }
 function Court({
   opening = false,
+  enter,
   match,
   now,
   section,
@@ -801,7 +803,7 @@ function Court({
       </section>
     );
   const tab =
-    section === "jury" ? "jury" : section === "records" ? "records" : "debate";
+    section === "jury" ? "jury" : section === "records" ? "records" : section === "others" ? "others" : "debate";
   return (
     <>
       <div className="court-banner">
@@ -826,6 +828,7 @@ function Court({
           ["debate", "辩论席"],
           ["jury", "陪审席"],
           ["records", "庭审记录"],
+          ["others", "其他场次"],
         ].map(([key, name]) => (
           <a
             key={key}
@@ -840,6 +843,8 @@ function Court({
         <Jury match={match} vote={vote} cast={cast} closed={closed} />
       ) : tab === "records" ? (
         <Records match={match} vote={vote} closed={closed} now={now} />
+      ) : tab === "others" ? (
+        <OtherCourts match={match} now={now} enter={enter} />
       ) : thread ? (
         <Thread
           key={thread}
@@ -891,6 +896,27 @@ function Court({
       )}
     </>
   );
+}
+function OtherCourts({ match, now, enter }) {
+  const priority = { open: 0, closed: 1, live: 2, scheduled: 3 };
+  const others = matches.filter((m) => m.id !== match.id).sort((a, b) => priority[courtState(a, now)] - priority[courtState(b, now)]);
+  return <section className="other-courts">
+    <div className="other-courts-heading"><h2>其他场次</h2><span>换一场，继续聊。</span></div>
+    <div className="other-courts-list">
+      {others.map((m) => {
+        const state = courtState(m, now), ready = state === "open" || state === "closed";
+        return <article className="other-court-row" key={m.id}>
+          <div className="other-court-meta"><span>{m.league}</span><Badge match={m} now={now} /></div>
+          <a className="other-court-score" href={"#/match/" + m.id} aria-label={teams[m.home].name + "对" + teams[m.away].name + "，查看赛况"}>
+            <span className="other-court-team"><Crest team={teams[m.home]} /><span>{teams[m.home].name}</span></span>
+            <Score match={m} />
+            <span className="other-court-team"><Crest team={teams[m.away]} /><span>{teams[m.away].name}</span></span>
+          </a>
+          <div className="other-court-bottom"><p>{m.topic || "比赛结束后，法庭开放。"}</p><button className={"button " + (ready ? "primary" : "quiet")} disabled={!ready} onClick={() => enter(m)} aria-label={(state === "open" ? "进入" : "查看") + teams[m.home].name + "对" + teams[m.away].name + "的法庭"}>{state === "open" ? "进入法庭" : state === "closed" ? "查看结果" : "完赛后开放"}<ArrowRight size={15} /></button></div>
+        </article>;
+      })}
+    </div>
+  </section>;
 }
 function Jury({ match, vote, cast, closed }) {
   const [selection, setSelection] = useState(vote);
@@ -1086,8 +1112,8 @@ function Thread({
                   onChange={(e) => setOpinion(e.target.value)}
                   aria-label="发言立场"
                 >
-                  <option value="red">红方</option>
-                  <option value="blue">蓝方</option>
+                  <option value="red">正方</option>
+                  <option value="blue">反方</option>
                   <option value="neutral">不站队</option>
                 </select>
               </label>
