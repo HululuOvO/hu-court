@@ -27,3 +27,7 @@ Before substantial visual changes, use Product Design get-context when the visua
 Build app UI in src/. Keep .openai/hosting.json, worker/index.js, scripts/prepare-sites-build.mjs, and tests/sites-worker.test.mjs intact for a Sites handoff. Before a Sites handoff run npm run build and npm run test:sites; leave dist/client/index.html, dist/server/index.js, and dist/.openai/hosting.json.
 
 GitHub Pages publishes this project from app/. The published CSS embeds the same stadium WebP bytes because browser binary upload is unavailable; preserve that image when syncing CSS.
+
+## Project name · 2026-10-11 17:50
+
+GitHub project name: HU Sport Court; repository HululuOvO/hu-sport-court. Public site: https://hululuovo.github.io/hu-sport-court/. The website wordmark remains HU. This request adds no account/login feature. GitHub Pages base derives from GITHUB_REPOSITORY, with hu-sport-court as fallback.
