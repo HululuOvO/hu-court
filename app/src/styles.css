@@ -2636,3 +2636,123 @@ footer span:last-child {
 @media (prefers-reduced-motion: reduce) { .duel-half, .duel-vs { transition: none; } }
 
 .featured-argument .expand-replies { margin-left: 0; }
+
+/* Repeatable demo, readable court, and competition identities. */
+.topbar .brand, .hu-wordmark { width: 58px; height: 42px; }
+.topbar .brand { transition: color .2s ease; }
+.topbar .brand:hover { color: #a50000; }
+.league-panel { --league-accent: #51215c; --league-tint: #f4eff8; --league-line: #e7dfee; }
+.league-panel[data-league="西甲"] { --league-accent: #d44537; --league-tint: #fff1ec; --league-line: #f1dfd8; }
+.league-panel[data-league="欧冠"] { --league-accent: #244183; --league-tint: #edf2fc; --league-line: #dce4f2; }
+.league-panel[data-league="德甲"] { --league-accent: #aa2634; --league-tint: #fff0f1; --league-line: #efdee1; }
+.league-panel[data-league="意甲"] { --league-accent: #1972a6; --league-tint: #edf7fc; --league-line: #dbeaf2; }
+.league-panel.panel { background: linear-gradient(180deg, var(--league-tint), #fff 165px); border: 1px solid var(--league-line); padding: 0 24px; overflow: hidden; box-shadow: 0 4px 22px #23314704; margin-bottom: 24px; }
+.league-panel > h2 { position: relative; isolation: isolate; height: 76px; margin: 0 -24px; padding: 0 24px; color: #202532; font-size: 22px; font-weight: 650; background: var(--league-tint); border-bottom: 1px solid var(--league-line); }
+.league-panel > h2::before { content: ''; position: absolute; left: 0; top: 24px; bottom: 24px; width: 3px; background: var(--league-accent); }
+.league-panel > h2::after { content: ''; position: absolute; z-index: -1; pointer-events: none; right: 120px; top: -66px; width: 230px; height: 230px; border: 1px solid var(--league-accent); border-radius: 50%; box-shadow: 0 0 0 24px var(--league-line), 0 0 0 25px var(--league-accent); opacity: .08; }
+.league-panel h2 > span { margin-left: 6px; font-size: 13px; font-weight: 500; color: #758091; }
+.league-panel h2 .league-table-link { color: var(--league-accent); font-size: 12px; font-weight: 550; }
+.league-panel .match-row { min-height: 118px; border-color: var(--league-line); }
+.match-score-link { align-items: center; }
+.score-group { position: relative; padding-bottom: 0; align-self: center; }
+.score-group .score-hint { position: absolute; top: 100%; width: 100%; margin-top: 5px; }
+.match-score-link .row-team { min-height: 58px; }
+.match-score-link:hover { background: #ffffff9c; }
+.court-shell .section-tabs a { font-size: 16px; font-weight: 600; }
+.court-banner .court-title .eyebrow { font-size: 13px; font-weight: 550; color: #ffffffd6; }
+.court-banner .big-team h2 { font-size: 17px; font-weight: 600; }
+.court-banner .match-meta, .court-banner .big-score-center > span { font-size: 13px; font-weight: 500; }
+.court-banner .court-clock { font-size: 13px; font-weight: 500; color: #ffffffe3; }
+.court-clock b { font: 550 14px/1.3 -apple-system, Arial, sans-serif; font-variant-numeric: tabular-nums; margin-left: 5px; }
+.court-highlight { font-size: 13px; padding: 11px 12px; }
+.highlight-quote b { font-weight: 600; }
+.support-heading > span { font-size: 16px; font-weight: 600; }
+.support-heading small { font-size: 12px; color: #737c8a; }
+.support-counts { font-size: 12px; font-weight: 500; color: #737c8a; }
+.duel-half > span { font-size: 14px; font-weight: 600; }
+.opinion-card, .opinion-card.red, .opinion-card.blue { min-height: 226px; }
+.opinion-meta > span:first-child { font-size: 13px; font-weight: 600; }
+.opinion-support { font-size: 12px; font-weight: 500; }
+.opinion-card p, .opinion-card.blue p { font-size: 15px; line-height: 1.85; color: #626c7b; font-weight: 450; }
+.opinion-footer { font-size: 14px; font-weight: 550; }
+.featured-argument .comment-header strong { font-size: 14px; font-weight: 600; color: #586273; }
+.featured-argument .comment-text { font-size: 15px; font-weight: 450; color: #333c49; }
+.featured-argument .comment-actions button { font-size: 12px; font-weight: 500; min-height: 32px; }
+.court-shell .comment-header strong { font-size: 14px; font-weight: 600; color: #586273; }
+.court-shell .comment-header > div span { font-size: 11px; color: #7a8492; }
+.court-shell .comment-text, .embedded-thread .comment-text { font-size: 15px; font-weight: 450; color: #333c49; }
+.court-shell .comment-actions, .court-shell .expand-replies { font-size: 12px; font-weight: 500; color: #748090; }
+.court-shell .side-tag { font-size: 12px; }
+.court-shell .neutral-entry span { font-size: 13px; font-weight: 500; }
+.court-shell .neutral-entry h2 { font-size: 22px; font-weight: 600; }
+.court-shell .vote-copy strong { font-size: 20px; font-weight: 600; }
+.court-shell .vote-copy p { font-size: 14px; line-height: 1.8; color: #657082; }
+.court-shell .vote-note { font-size: 12px; color: #738091; }
+.court-shell .section-heading > p { font-size: 14px; font-weight: 500; }
+.court-shell .reply { font-size: 13px; line-height: 1.8; }
+.entrance-screen > .entrance-scales { width: 76px; height: 76px; animation: none; }
+.scale-beam { transform-origin: 48px 31px; animation: balance-swing .9s ease-in-out infinite; }
+.scale-pan { animation: pan-counter-swing .9s ease-in-out infinite; }
+.scale-pan.left { transform-origin: 17px 31px; }
+.scale-pan.right { transform-origin: 79px 31px; }
+@keyframes balance-swing { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(12deg); } }
+@keyframes pan-counter-swing { 0%,100% { transform: rotate(12deg); } 50% { transform: rotate(-12deg); } }
+.closed-case > .eyebrow, .closed-case > h2 { animation: case-in .45s ease both; }
+.closed-case .verdict { animation: case-in .6s .1s ease both; }
+.closed-case .jury-panel { animation: case-in .6s .25s ease both; }
+.closed-case .record-summary { animation: case-in .6s .4s ease both; }
+.verdict-label { display: flex; align-items: center; gap: 8px; }
+.verdict-check { animation: verdict-check-in .55s .25s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes case-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes verdict-check-in { from { opacity: 0; transform: scale(.6) rotate(-18deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+@media (max-width: 700px) {
+  .topbar .brand, .hu-wordmark { width: 50px; height: 38px; }
+  .league-panel.panel { padding: 0 16px; margin-bottom: 20px; }
+  .league-panel > h2 { margin: 0 -16px; padding: 0 16px; height: 64px; font-size: 19px; }
+  .league-panel > h2::before { top: 20px; bottom: 20px; }
+  .league-panel > h2::after { right: 60px; top: -88px; }
+  .league-panel h2 > span { font-size: 11px; margin-left: 0; }
+  .league-panel h2 .league-table-link { font-size: 11px; }
+  .league-panel .match-row { min-height: 173px; padding-top: 16px; padding-bottom: 16px; }
+  .match-score-link { align-items: start; min-height: 68px; }
+  .match-score-link .row-team { min-height: 68px; }
+  .score-group { align-self: start; padding-top: 5px; }
+  .score-group .score-hint { margin-top: 5px; font-size: 9px; }
+  .row-status, .badge { font-size: 11px; }
+  .court-shell .section-tabs a { font-size: 14px; font-weight: 600; padding: 18px 0; }
+  .court-banner .court-title .eyebrow { font-size: 12px; }
+  .court-banner .big-team h2 { font-size: 15px; }
+  .court-banner .match-meta, .court-banner .big-score-center > span { font-size: 12px; }
+  .court-banner .court-clock { font-size: 12px; }
+  .court-clock b { font-size: 13px; }
+  .court-highlight { font-size: 12px; }
+  .highlight-likes { font-size: 11px; }
+  .support-heading > span { font-size: 14px; }
+  .support-heading small { font-size: 10px; }
+  .support-counts { font-size: 11px; }
+  .duel-half > span { font-size: 12px; }
+  .opinion-grid { gap: 14px; }
+  .opinion-card, .opinion-card.red, .opinion-card.blue { min-height: 246px; padding: 18px 13px; }
+  .opinion-card h2 { font-size: 19px; line-height: 1.55; }
+  .opinion-meta { flex-wrap: wrap; gap: 7px; }
+  .opinion-meta > span:first-child { font-size: 12px; }
+  .opinion-support { font-size: 11px; }
+  .opinion-card p, .opinion-card.blue p { font-size: 13px; line-height: 1.8; }
+  .opinion-footer { font-size: 12px; }
+  .featured-argument .comment-header strong, .court-shell .comment-header strong { font-size: 13px; }
+  .featured-argument .comment-text, .court-shell .comment-text, .embedded-thread .comment-text { font-size: 14px; line-height: 1.85; }
+  .featured-argument .comment-actions { flex-wrap: wrap; gap: 8px; }
+  .featured-argument .comment-actions button { font-size: 11px; }
+  .court-shell .comment-header > div span { font-size: 10px; }
+  .court-shell .side-tag { font-size: 10px; }
+  .court-shell .neutral-entry span { font-size: 12px; }
+  .court-shell .neutral-entry h2 { font-size: 19px; }
+  .court-shell .vote-copy strong { font-size: 17px; }
+  .court-shell .vote-copy p { font-size: 13px; }
+  .entrance-screen > .entrance-scales { width: 68px; height: 68px; }
+}
+@media (prefers-reduced-motion: reduce) { .scale-beam, .scale-pan, .closed-case > .eyebrow, .closed-case > h2, .closed-case .verdict, .closed-case .jury-panel, .closed-case .record-summary, .verdict-check { animation: none; } }
+.league-table-link svg, .opinion-footer svg { transition: transform .2s ease; }
+.league-table-link:hover svg { transform: translate(2px,-2px); }
+.opinion-card:hover .opinion-footer svg { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) { .league-table-link svg, .opinion-footer svg { transition: none; } }
