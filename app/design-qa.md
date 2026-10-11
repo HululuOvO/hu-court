@@ -20,9 +20,9 @@ Requested deviations are implemented: HU only; red controls; stadium only in the
 ## Findings resolved
 
 1. P1: stadium covered the whole page and appeared behind court opinions. Restricted the photographic asset to a 480 px home hero, masked to white; no stadium in court.
-2. P1: entrance was a small pale modal with little impact. Replaced with full-screen red/blue panels, large staggered title, a short hold, and opening seam transition. Escape and skip remain available.
+2. P1: entrance was a small pale modal with little impact. Replaced with full-screen red/blue panels, large staggered title, a short hold, and opening seam transition. Latest revision uses solid red/blue halves that strike a central seam, a clean 开庭 title, and an outward opening that directly reveals the already-rendered court; no intermediate black screen. Escape and skip remain available.
 3. P1: debate had no immediately visible confrontation proportions. Added large red/blue support strip, moving seam, animated percentages and live vote counts. Neutral votes are counted separately and that denominator is stated.
-4. P2: top navigation appeared disconnected and had no selected match state inside court. Separated white straight-edged navigation from the solid-red score/title section; HU is a red wordmark and 比赛 is selected with a red underline. Home shares the same white straight-edged navigation and enlarged heavy HU vector wordmark.
+4. P2: top navigation appeared disconnected and had no selected match state inside court. Separated white straight-edged navigation from the solid-red score/title section; HU is a red wordmark and 比赛 is selected with a red underline. Home shares the same white straight-edged navigation and smaller medium-weight HU vector wordmark.
 5. P2: jury voting cards were visually complex. Changed to vertical single-choice rows with an explicit confirmation button. Results appear after voting; switching moves the existing vote.
 6. P2: early mobile headings split team names. Natural phrase breaks preserve 曼联; columns remain side by side for direct comparison.
 7. P2: VS touched the blue percentage. Increased seam padding on desktop and phone.
@@ -33,7 +33,7 @@ No known unresolved P0/P1/P2 visual or flow findings remain for this frontend pr
 
 ## Typography, color, layout, assets and copy
 
-- Heavy Chinese match/major-opinion headings, quieter body copy and smaller comments. Noto Sans SC with PingFang/system fallback. HU uses crisp heavy vector letterforms with a slight forward lean, directly in red on white navigation across home and court.
+- Heavy Chinese match/major-opinion headings, quieter body copy and smaller comments. Noto Sans SC with PingFang/system fallback. HU uses crisp medium-weight vector letterforms with a slight forward lean, directly in red on white navigation across home and court.
 - White body; home uses its fading stadium hero below a white straight-edged toolbar; court uses one flat deep red score section, red/blue proportion strip, white opinion columns and a neutral gray panel. Main opinions remain more prominent than comments.
 - Six aligned score rows, separate court button, responsive 390 px layout; no support percentages on the home page.
 - Actual club crest SVGs loaded; Phosphor icons; original generated stadium WebP. GitHub source embeds the same WebP bytes in CSS to publish without binary upload. No screenshot used as page artwork, no fabricated league marks.
@@ -53,4 +53,6 @@ No known unresolved P0/P1/P2 visual or flow findings remain for this frontend pr
 
 This is a frontend prototype with clearly labelled sample fixtures. Comments, votes, likes and follows reset on refresh and are not shared between users. No real fixture API, login backend or notification delivery is implemented. Jury results are community sample votes, not an AI fact judgment.
 
-Latest home/logo evidence: `qa/HU-home-wordmark-desktop.png` and `qa/HU-home-wordmark-mobile.png`. Enlarged HU letterforms replace the thin small lettering and rounded red tile.
+Latest home/logo evidence: `qa/HU-home-wordmark-desktop.png` and `qa/HU-home-wordmark-mobile.png`. HU letterforms replace the rounded red tile. Latest feedback reduces strokes from 14 to 10–11 vector units and display width to 92px desktop / 72px phone. Current evidence: `qa/HU-refined-wordmark.png`.
+
+Opening evidence: `qa/HU-opening-collision.png`, `qa/HU-opening-collision-mobile.png`. Phone 390px has no horizontal overflow. Click-to-court opens underneath the animation; 2.4s auto completion, skip button and Escape preserve navigation. Reduced motion is a static 0.5s introduction.
