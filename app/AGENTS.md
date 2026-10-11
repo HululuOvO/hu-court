@@ -9,7 +9,7 @@
 - Responsive phone layout. First release uses clearly labelled sample data, in-session interactions.
 - Latest references: 12.30.37 home and 12.32.36 debate screenshots. Stadium belongs only to the fading homepage hero; court is white with a strong red match banner. Full-screen red/blue entrance, large red/blue proportional support bar, clear side headings, neutral entry below. Keep debate first and comments behind entries. Jury uses simple single-choice rows and explicit submit, with animated count changes and vote switching.
 - Latest toolbar feedback: tint the top navigation with subtle color, strengthen HU identity and unify it with the red court banner. Keep the red match banner rather than introducing split team colors. League headings use text only. Preserve all interactive flows.
-- Club crests must look clean on the red match banner. Preserve authentic vectors, use a consistent white round backing and balanced padding to hide translucent square backgrounds; do not alter club shapes or invent logos.
+
 
 Run the local server yourself and open the preview in the browser available to this environment. Do not give the user server-start instructions when you can run it.
 
@@ -18,3 +18,6 @@ Before making substantial visual changes, use the Product Design plugin's `get-c
 When implementing from a selected generated mock, treat that image as the source of truth for layout, component anatomy, density, spacing, color, typography, visible content, and hierarchy.
 
 Build app UI in `src/`. Keep `.openai/hosting.json`, `worker/index.js`, `scripts/prepare-sites-build.mjs`, and `tests/sites-worker.test.mjs` intact so the same local prototype can be handed to Sites. Before a Sites handoff, run `npm run build` and `npm run test:sites`; the build must leave `dist/client/index.html`, `dist/server/index.js`, and `dist/.openai/hosting.json`.
+
+- Final clarification: the uppermost HU navigation is a clean white, straight-edged full-width bar, no gradient, glass tile or rounded nav pills. HU is a red wordmark, navigation uses a red underline. Below it, score and court title stay in a solid red, full-width, straight-edged section. Debate stays white with red/blue support strip.
+- Crest feedback: no white backing and no global tint. Manchester United's three external white gaps are transparent; every shield/color path remains unchanged. Tottenham uses a clear white silhouette on the red section, with its source shape and negative spaces retained. Match lists use the original club assets.
