@@ -19,7 +19,8 @@ import {
 import { matches, teams, courtState, makeComments, demoRemaining } from "./data";
 import { courtCrests } from "./crest-assets";
 import { leagues, standingsSnapshot } from "./standings-data";
-import { Community, News, Scorers, QualificationLegend, rankZone } from "./ContentPages";
+import { Community, News, QualificationLegend, rankZone } from "./ContentPages";
+import { forumTopics, makeForumComments } from "./content-data";
 const sides = { red: "正方", blue: "反方", neutral: "不站队", hot: "热评" };
 const parseRoute = () => location.hash.slice(1).split("/").filter(Boolean);
 const go = (path = "") => (location.hash = "/" + path);
@@ -147,10 +148,11 @@ export function App() {
     [intro, setIntro] = useState(null),
     [toast, setToast] = useState("");
   const [comments, setComments] = useState(() =>
-      Object.fromEntries(matches.map((m) => [m.id, makeComments(m)])),
+      Object.fromEntries([...matches.map((m) => [m.id, makeComments(m)]), ...forumTopics.filter(t => !t.matchId).map(t => [t.id, makeForumComments(t)])]),
     ),
     [votes, setVotes] = useState({}),
     [liked, setLiked] = useState({});
+  const [customTopics, setCustomTopics] = useState([]);
   const [profile, setProfile] = useState(false),
     [nickname, setNickname] = useState("我"),
     [draftName, setDraftName] = useState("");
@@ -235,6 +237,13 @@ export function App() {
     }));
     setToast("发言已加入本次体验");
   };
+  const addTopic = ({ spaceId, title, summary }) => {
+    const id = "forum-" + crypto.randomUUID();
+    setCustomTopics(t => [{ id, spaceId, title, summary, author: nickname, category: "球迷看台", createdAt: Date.now(), demo: false }, ...t]);
+    setComments(c => ({ ...c, [id]: [] }));
+    setToast("帖子已加入本次体验");
+    return id;
+  };
   const addReply = (id, parent, text) => {
     setComments((c) => ({
       ...c,
@@ -291,11 +300,11 @@ export function App() {
         </header>
         <main ref={mainRef} tabIndex={-1}>
           {route[0] === "community" ? (
-            <Community topicId={route[1]} comments={comments} liked={liked} like={like} addComment={addComment} addReply={addReply} enter={enter} Thread={Thread} Crest={Crest} />
+            <Community key={route.slice(1).join("/")} segments={route.slice(1)} customTopics={customTopics} addTopic={addTopic} comments={comments} liked={liked} like={like} addComment={addComment} addReply={addReply} enter={enter} Thread={Thread} Crest={Crest} />
           ) : route[0] === "news" ? (
-            <News articleId={route[1]} enter={enter} />
+            <News articleId={route[1]} Crest={Crest} />
           ) : route[0] === "scorers" ? (
-            <Scorers leagueId={route[1]} Crest={Crest} />
+            <Standings leagueId={route[1]} />
           ) : route[0] === "standings" ? (
             <Standings leagueId={route[1]} />
           ) : home ? (
@@ -341,7 +350,7 @@ export function App() {
         </main>
         <footer>
           <span className="footer-brand">HU</span>
-          <span>{route[0] === "standings" ? "积分榜 · ESPN 数据快照" : ["community", "news"].includes(route[0]) ? "中文内容 · 初版体验" : route[0] === "scorers" ? "射手榜 · 示例比赛统计" : "示例比赛 · 前端互动体验"}</span>
+          <span>{["standings", "scorers"].includes(route[0]) ? "积分榜 · ESPN 数据快照" : ["community", "news"].includes(route[0]) ? "中文内容 · 初版体验" : "示例比赛 · 前端互动体验"}</span>
           <span>发言和投票仅保留在本次体验</span>
         </footer>
       </div>
@@ -454,7 +463,6 @@ function Standings({ leagueId }) {
   const league = leagues.find((l) => l.id === leagueId) || leagues[0];
   return <section className="standings-page">
     <div className="standings-page-heading"><div><p className="eyebrow">2026–27 赛季</p><h1>积分榜</h1></div><span>更新于 {standingsSnapshot}</span></div>
-    <nav className="ranking-kind" aria-label="选择榜单"><a className="selected" href={"#/standings/" + league.id} aria-current="page">积分榜</a><a href={"#/scorers/" + league.id}>射手榜</a></nav>
     <nav className="standings-tabs" aria-label="选择积分榜赛事">
       {leagues.map((l) => <a className={league.id === l.id ? "selected" : ""} aria-current={league.id === l.id ? "page" : undefined} key={l.id} href={"#/standings/" + l.id}><LeagueLogo league={l} /><span>{l.name}</span></a>)}
     </nav>
@@ -1079,6 +1087,7 @@ function Records({ match, vote, closed, now, startedAt }) {
 }
 function Thread({
   embedded = false,
+  community = false,
   match,
   side,
   comments,
@@ -1100,7 +1109,7 @@ function Thread({
         : (b.createdAt || 0) - (a.createdAt || 0),
     );
   return (
-    <section className={"thread-view" + (embedded ? " embedded-thread" : "")}>
+    <section className={"thread-view" + (embedded ? " embedded-thread" : "") + (community ? " forum-thread" : "")}>
       {!embedded && <><a className="back-link" href={"#/court/" + match.id + "/debate"}>
         <ArrowLeft size={17} />
         所有观点
@@ -1119,7 +1128,7 @@ function Thread({
       <div className="panel comments-panel">
         <div className="comments-title">
           <h3>
-            {embedded ? "大家怎么说" : "讨论"} <span>{list.length}条发言</span>
+            {embedded && !community ? "大家怎么说" : "讨论"} <span>{list.length}条发言</span>
           </h3>
           <div className="comment-toolbar">
           {embedded && !closed && <button className="write-opinion" onClick={() => setShowComposer((v) => !v)} aria-expanded={showComposer}>发表意见 <ArrowUpRight size={15} /></button>}
@@ -1151,7 +1160,7 @@ function Thread({
               }
             }}
           >
-            {side === "hot" && (
+            {side === "hot" && !community && (
               <label className="composer-side">
                 选择观点
                 <select
@@ -1166,13 +1175,13 @@ function Thread({
               </label>
             )}
             <label className="sr-only" htmlFor="comment-text">
-              你的观点
+              {community ? "你的发言" : "你的观点"}
             </label>
             <textarea
               id="comment-text"
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="说说你看到的比赛。"
+              placeholder={community ? "聊聊你的看法。" : "说说你看到的比赛。"}
               maxLength={300}
               rows={2}
             />
